@@ -1,0 +1,13 @@
+***** integer -> char *****
+function itoa( int )
+* ascii character table
+  table = ' !"#$%&'
+  table = table % "'"
+  table = table % '()*+,-./0123456789:;<=>?@'
+  table = table % 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`'
+  table = table % 'abcdefghijklmnopqrstuvwxyz{|}~'
+
+  if( int >= 32 & int <= 126 )
+    return substr( table, int-31, 1 )
+  endif
+return -1

@@ -1,0 +1,13 @@
+* return position of the single character in string.
+* return -1 if char does not exist.
+function find( str, char )
+  ntmp = math_strlen( str )
+  i = 1
+  while( i <= ntmp )
+    tmp = substr(str,i,1)
+    if( tmp = char )
+      return i
+    endif
+    i = i + 1
+  endwhile
+return -1

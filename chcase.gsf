@@ -1,0 +1,25 @@
+* type = 'upper' or 'lower' or 'upper-first'
+function chcase( str, type )
+  ret = ''
+  i = 1
+  length = math_strlen( str )
+  while( i <= length )
+    c = substr( str, i, 1 )
+    c = atoi( c )
+    if( type = 'upper' & c >= 97 & c <= 122 )
+      c = c - 32
+    endif
+    if( type = 'upper_first' & c >= 97 & c <= 122 & i = 1 )
+      c = c - 32
+    endif
+    if( type = 'lower' & c >= 65 & c <= 90 )
+      c = c + 32
+    endif
+    if( type = 'upper_first' & c >= 65 & c <= 90 & i != 1 )
+      c = c + 32
+    endif
+    c = itoa( c )
+    ret = ret % c
+    i = i + 1
+  endwhile
+return ret

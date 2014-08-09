@@ -1,0 +1,17 @@
+function z2lev( z )
+  'q dims'
+  line = sublin( result, 4 )
+  type = subwrd( line, 3 )
+  if( type = 'varying' )
+    z1 = subwrd( line, 11 )
+    z2 = subwrd( line, 13 )
+  else
+    z1 = subwrd( line, 9 )
+    z2 = subwrd( line, 9 )
+  endif
+  'set z 'z
+  'q dims'
+  line = sublin( result, 4 )
+  lev = subwrd( line, 6 )
+  'set z 'z1' 'z2
+return lev

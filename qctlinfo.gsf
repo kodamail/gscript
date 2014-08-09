@@ -1,0 +1,62 @@
+* id = dset
+*      title
+*      undef
+*      xdef
+*      ydef
+*      zdef
+*      tdef
+*      vars
+*      'var-name'
+*      vlist
+*
+*  num = 0: id itself
+*  num >= 1
+function qctlinfo( fn, id, num )
+* check arguement
+  if( valnum(fn) != 1 )
+    say 'error: fn = ' % fn % ' is illegal.'
+    exit
+  endif
+  if( valnum(id) != 0 )
+    say 'error: id = ' % id % ' is illegal.'
+    exit
+  endif
+  if( valnum(num) != 1 )
+    say 'error: num = ' % num % ' is illegal.'
+    exit
+  endif
+
+* save current file number
+  'q file'
+  line = sublin( result, 1 )
+  fnc = subwrd( line, 2 )
+  ret = ''
+
+* obtain control file information
+  'set dfile 'fn
+  'q ctlinfo'
+  i = 1
+  stat = ''
+  while( i <= 10000 )
+    line = sublin( result, i )
+    if( line = '' ) ; break ; endif
+
+    key = subwrd( line, 1 )
+    if( key = id )
+      ret = subwrd( line, num+1 )
+      break
+    endif
+    if( key = 'endvars' & id = 'vlist' & stat = 'vars' )
+      break
+    endif
+    if( id = 'vlist' & stat = 'vars' )
+      ret = ret % subwrd( line, 1 ) % ' '
+    endif
+    if( key = 'vars' & id = 'vlist' & stat = '' )
+      stat = 'vars'
+    endif
+    i = i + 1
+  endwhile
+  'set dfile 'fnc
+
+return ret

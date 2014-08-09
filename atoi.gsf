@@ -1,0 +1,17 @@
+***** char -> integer *****
+function atoi( char )
+  rc = gsfallow( 'on' )
+
+* avoid bug in GrADS 1.9 or less ('e' and '+' are assumed to be same)
+  a='1'char'5'
+  if( a = 1e+5 )  ; return 101 ; endif
+  if( a = '1+5' ) ; return 43  ; endif
+
+if( char = a ) ; return 43 ; endif
+  if( char = 'e' ) ; return 101 ; endif
+  i = 32
+  while( i <= 126 )
+    if( itoa(i) = char ) ; return i ; endif
+    i = i + 1
+  endwhile
+return -1

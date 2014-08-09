@@ -1,0 +1,33 @@
+function rgnwrd( str, n_start, n_end, sep )
+  if( sep = 'sep' | sep = '' )
+    n = n_start
+    ret = ''
+    while( n <= n_end )
+      tmp = subwrd( str, n )
+      if( tmp = '' ) ; break ; endif
+      ret = ret % tmp % ' '
+      n = n + 1
+    endwhile
+
+  else
+    ret = ''
+    len = math_strlen( str )
+    p = 1
+    i = 1
+    imin = 1
+    imax = len
+    while( i <= len )
+      c = substr( str, i, 1 )
+      if( c = sep )
+        p = p + 1
+        if( p = n_start ) ; imin = i + 1 ; endif
+        if( p > n_end   ) ; imax = i - 1 ; break ; endif
+      endif
+      i = i + 1
+    endwhile
+
+    if( imin > imax ) ; ret = ''
+    else ; ret = substr( str, imin, imax-imin+1 ) ; endif
+  endif
+
+return ret

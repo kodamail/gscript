@@ -1,0 +1,27 @@
+function dayofyear( time )
+  length = math_strlen( time )
+  year   = substr( time, length-3, 4 )
+  cmonth = substr( time, length-6, 3 )
+  day = substr( time, length-8, 2 )
+
+  if( cmonth = 'JAN' ) ; month = 1  ; endif
+  if( cmonth = 'FEB' ) ; month = 2  ; endif
+  if( cmonth = 'MAR' ) ; month = 3  ; endif
+  if( cmonth = 'APR' ) ; month = 4  ; endif
+  if( cmonth = 'MAY' ) ; month = 5  ; endif
+  if( cmonth = 'JUN' ) ; month = 6  ; endif
+  if( cmonth = 'JUL' ) ; month = 7  ; endif
+  if( cmonth = 'AUG' ) ; month = 8  ; endif
+  if( cmonth = 'SEP' ) ; month = 9  ; endif
+  if( cmonth = 'OCT' ) ; month = 10 ; endif
+  if( cmonth = 'NOV' ) ; month = 11 ; endif
+  if( cmonth = 'DEC' ) ; month = 12 ; endif
+
+  doy = 0
+  m = 1
+  while( m < month )
+    doy = doy + days( year, m )
+    m = m + 1
+  endwhile
+  doy = doy + day
+return doy

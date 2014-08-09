@@ -1,0 +1,56 @@
+* id = last
+*      pagex, pagey
+*      xmin, xmax
+*      ymin, ymax
+*      xaxis, yaxis
+*      mproj
+function qgxinfo( id )
+  ret = ''
+  'q gxinfo'
+
+  if( id = 'last' )
+    line = sublin( result, 1 )
+    ret  = subwrd( line,   4 )
+  endif
+
+  if( id = 'pagex' )
+    line = sublin( result, 2 )
+    ret  = subwrd( line,   4 )
+  endif
+  if( id = 'pagey' )
+    line = sublin( result, 2 )
+    ret  = subwrd( line,   6 )
+  endif
+
+  if( id = 'xmin' )
+    line = sublin( result, 3 )
+    ret  = subwrd( line,   4 )
+  endif
+  if( id = 'xmax' )
+    line = sublin( result, 3 )
+    ret  = subwrd( line,   6 )
+  endif
+
+  if( id = 'ymin' )
+    line = sublin( result, 4 )
+    ret  = subwrd( line,   4 )
+  endif
+  if( id = 'ymax' )
+    line = sublin( result, 4 )
+    ret  = subwrd( line,   6 )
+  endif
+
+  if( id = 'xaxis' )
+    line = sublin( result, 5 )
+    ret  = subwrd( line,   3 )
+  endif
+  if( id = 'yaxis' )
+    line = sublin( result, 5 )
+    ret  = subwrd( line,   6 )
+  endif
+
+  if( id = 'mproj' )
+    line = sublin( result, 6 )
+    ret  = subwrd( line,   3 )
+  endif
+return ret

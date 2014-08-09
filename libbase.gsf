@@ -1,0 +1,66 @@
+*
+* basic library for grads script
+*
+* libbase( 'args...' )
+*
+function libbase( args )
+
+********** BELOW PLEASE SET PATH FOR TEMPORARY BUFFER ************
+* for act = 'pwd'
+*
+  _buff_path = '/var/tmp'
+*  _buff_path = '.'
+********** ABOVE PLEASE SET PATH FOR TEMPORARY BUFFER ************
+
+  act = subwrd( args, 1 )
+  act_length = math_strlen( act )
+  args_length = math_strlen( args )
+
+  p = act_length + 1
+  while( p <= args_length )
+    str = substr( args, p, 1 )
+    if( str != ' ' ) ; break ; endif
+    p = p + 1
+  endwhile
+
+  if( p <= args_length )
+    next_args = substr( args, p, args_length-p+1 )
+  else
+    next_args = ''
+  endif
+
+  if( act = 'pwd' )
+    ret = libbase_pwd( next_args )
+    return ret
+  endif
+
+
+  say 'error: act = ' % act % ' is not supported'
+return
+
+*
+* libbase_pwd() : obtain current path
+*
+function libbase_pwd( args )
+  buff = _buff_path % '/grads_libbase_pwd.txt'
+
+  i = 1
+  imax = 10
+  while( i <= imax )
+    temp = read( buff )
+    status = sublin( temp, 1 )
+    if( status = 1 ) ; break ; endif
+    temp = close( buff )
+    if( status != 1 & i = imax )
+      say 'error: temporary file = ' % buff % ' already exists'
+      return ''
+    endif
+    '!sleep 1s'
+    i = i + 1
+  endwhile
+
+  '!pwd > 'buff
+  temp = read( buff )
+  ret = sublin( temp, 2 )
+  '!rm -f 'buff
+return ret

@@ -1,0 +1,34 @@
+* id = general
+*      1d-1expr, 1d-2expr,
+*      2d-1expr, 2d-2expr,
+*      station
+function qgxout( id )
+  ret = ''
+  'q gxout'
+
+  if( id = 'general' )
+    line = sublin( result, 1 )
+    ret  = subwrd( line,   3 )
+  endif
+
+  if( id = '1d-1expr' )
+    line = sublin( result, 2 )
+    ret  = subwrd( line,   6 )
+  endif
+  if( id = '1d-2expr' )
+    line = sublin( result, 3 )
+    ret  = subwrd( line,   6 )
+  endif
+  if( id = '2d-1expr' )
+    line = sublin( result, 4 )
+    ret  = subwrd( line,   6 )
+  endif
+  if( id = '2d-2expr' )
+    line = sublin( result, 5 )
+    ret  = subwrd( line,   6 )
+  endif
+  if( id = 'station' )
+    line = sublin( result, 6 )
+    ret  = subwrd( line,   4 )
+  endif
+return ret

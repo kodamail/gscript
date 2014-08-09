@@ -1,0 +1,16 @@
+* get argument of z=x+iy in radian.
+function arg( x, y )
+  pi = 4 * math_atan(1.0)
+  if( x > 0 & y > 0 ) ; ret = math_atan( y / x )            ; endif
+  if( x < 0 & y > 0 ) ; ret = _pi - math_atan( y / (-x) )   ; endif
+  if( x < 0 & y < 0 ) ; ret = _pi + math_atan( y / x )      ; endif
+  if( x > 0 & y < 0 ) ; ret = 2*_pi - math_atan( (-y) / x ) ; endif
+
+  if( x = 0 & y > 0 ) ; ret = 0.5*_pi; endif
+  if( x = 0 & y < 0 ) ; ret = 1.5*_pi; endif
+  if( x > 0 & y = 0 ) ; ret = 0.0*_pi; endif
+  if( x < 0 & y = 0 ) ; ret = 1.0*_pi; endif
+  if( x = 0 & y = 0 ) ; ret = 9999; endif
+*say 'arg: ' % x % ' - ' % y % ' - ' % ret
+
+return ret

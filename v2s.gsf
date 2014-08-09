@@ -1,0 +1,11 @@
+function v2s( var )
+  'd 'var
+  check.1 = subwrd( result, 1 )
+  check.2 = subwrd( result, 2 )
+  if( check.1 = 'Result' & check.2 = 'value' )
+    value = subwrd( result, 4 )
+  else
+    value = 'error: var does not seem to be a single value.'
+  endif
+  return value
+end function

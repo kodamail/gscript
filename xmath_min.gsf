@@ -1,0 +1,3 @@
+function xmath_min( v1, v2 )
+  if( v1 > v2 ) ; return v2 ; endif
+return v1

@@ -1,0 +1,4 @@
+function sublw( str, lnum, wnum )
+  line = sublin( str, lnum )
+  ret  = subwrd( line, wnum )
+return ret

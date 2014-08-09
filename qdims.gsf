@@ -1,0 +1,66 @@
+* id = fnum
+*      xtype
+*      lonmin, lonmax
+*      xmin, xmax
+*      ytype
+*      ...
+*      z
+*      t
+*      e
+function qdims( id )
+  ret = ''
+  'q dims'
+  if( id = 'fnum' )
+    line = sublin( result, 1 )
+    ret = subwrd( line, 5 )
+    return ret
+  endif
+
+  if( id = 'xtype' | id = 'lonmin' | id = 'lonmax' | id = 'xmin' | id = 'xmax'  )
+    line = sublin( result, 2 )
+  endif
+  if( id = 'ytype' | id = 'latmin' | id = 'latmax' | id = 'ymin' | id = 'ymax' )
+    line = sublin( result, 3 )
+  endif
+
+  if( id = 'ztype' | id = 'levmin' | id = 'levmax' | id = 'zmin' | id = 'zmax' )
+    line = sublin( result, 4 )
+  endif
+
+  if( id = 'ttype' | id = 'timemin' | id = 'timemax' | id = 'tmin' | id = 'tmax' )
+    line = sublin( result, 5 )
+  endif
+
+  if( id = 'etype' | id = 'ensmin' | id = 'ensmax' | id = 'emin' | id = 'emax' )
+    line = sublin( result, 6 )
+  endif
+
+  type = subwrd( line, 3 )
+  if( id = 'xtype' | id = 'ytype' | id = 'ztype' | id = 'ttype' | id = 'etype' )
+    ret = type
+  endif
+
+  if( id = 'lonmin' | id = 'latmin' | id = 'levmin' | id = 'timemin' | id = 'ensmin' )
+    ret = subwrd( line, 6 )
+    return ret
+  endif
+
+  if( id = 'lonmax' | id = 'latmax' | id = 'levmax' | id = 'timemax' | id = 'ensmax' )
+    if( type = 'fixed' ) ; ret = subwrd( line, 6 )
+    else ; ret = subwrd( line, 8 ) ; endif
+    return ret
+  endif
+
+  if( id = 'xmin' | id = 'ymin' | id = 'zmin' | id = 'tmin' | id = 'emin' )
+    if( type = 'fixed' ) ; ret = subwrd( line, 9 )
+    else ; ret = subwrd( line, 11 ) ; endif
+    return ret
+  endif
+  
+  if( id = 'xmax' | id = 'ymax' | id = 'zmax' | id = 'tmax' | id = 'emax' )
+    if( type = 'fixed' ) ; ret = subwrd( line, 9 )
+    else ; ret = subwrd( line, 13 ) ; endif
+    return ret
+  endif
+  
+return ret
