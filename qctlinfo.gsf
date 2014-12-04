@@ -12,6 +12,8 @@
 *  num = 0: id itself
 *  num >= 1
 function qctlinfo( fn, id, num )
+ _version = '0.04r1'
+
 * check arguement
   if( valnum(fn) != 1 )
     say 'error: fn = ' % fn % ' is illegal.'
@@ -21,7 +23,7 @@ function qctlinfo( fn, id, num )
     say 'error: id = ' % id % ' is illegal.'
     exit
   endif
-  if( valnum(num) != 1 )
+  if( valnum(num) != 1 & num != '' & num != 'num' )
     say 'error: num = ' % num % ' is illegal.'
     exit
   endif
@@ -43,7 +45,11 @@ function qctlinfo( fn, id, num )
 
     key = subwrd( line, 1 )
     if( key = id )
-      ret = subwrd( line, num+1 )
+      if( num = '' | num = 'num' )
+        ret = line
+      else
+        ret = subwrd( line, num+1 )
+      endif
       break
     endif
     if( key = 'endvars' & id = 'vlist' & stat = 'vars' )
