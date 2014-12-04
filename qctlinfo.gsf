@@ -12,7 +12,7 @@
 *  num = 0: id itself
 *  num >= 1
 function qctlinfo( fn, id, num )
- _version = '0.04r1'
+ _version = '0.03r2'
 
 * check arguement
   if( valnum(fn) != 1 )
