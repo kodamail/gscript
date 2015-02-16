@@ -37,6 +37,7 @@ zip gscript.zip   \
     atoi.gsf      \
     chcase.gsf    \
     cmonth.gsf    \
+    comarg.gsf    \
     color.gsf     \
     dayofyear.gsf \
     days.gsf      \
