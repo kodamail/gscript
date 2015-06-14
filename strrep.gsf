@@ -1,0 +1,19 @@
+function strrep( str, org, rep )
+  ret = ''
+  l_str = math_strlen( str )
+  l_org = math_strlen( org )
+
+  i = 1
+  while( i <= l_str )
+    tmp = substr( str, i, l_org )
+    if( tmp = org )
+      ret = ret % rep
+      i = i + l_org
+      continue
+    endif
+    c = substr( str, i, 1 )
+    ret = ret % c
+    i = i + 1
+  endwhile
+
+return ret

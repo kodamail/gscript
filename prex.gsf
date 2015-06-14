@@ -1,0 +1,4 @@
+function prex( cmd )
+  say cmd
+  cmd
+return

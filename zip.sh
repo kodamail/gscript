@@ -1,0 +1,70 @@
+#!/bin/sh
+
+rm gscript.zip
+
+zip gscript.zip   \
+    allclose.gs   \
+    allcolor.gs   \
+    arrow.gs      \
+    clave.gs      \
+    color.gs      \
+    cutdata.gs    \
+    dlev.gs       \
+    drawpoly.gs   \
+    draws.gs      \
+    dshade.gs     \
+    grid.gs       \
+    hatch.gs      \
+    line.gs       \
+    loglabel.gs   \
+    lreg.gs       \
+    max.gs        \
+    min.gs        \
+    mul.gs        \
+    mulval.gs     \
+    save.gs       \
+    setfont.gs    \
+    setlabs.gs    \
+    shade.gs      \
+    shift.gs      \
+    strmem.gs     \
+    subst.gs      \
+    tbox.gs       \
+    xcbar.gs      \
+    xopen.gs      \
+    zero.gs       \
+    arg.gsf       \
+    atoi.gsf      \
+    chcase.gsf    \
+    cmonth.gsf    \
+    comarg.gsf    \
+    color.gsf     \
+    dayofyear.gsf \
+    days.gsf      \
+    find.gsf      \
+    getstr.gsf    \
+    itoa.gsf      \
+    last.gsf      \
+    lat2y.gsf     \
+    lev2z.gsf     \
+    libbase.gsf   \
+    prex.gsf      \
+    printf.gsf    \
+    pwd.gsf       \
+    qctlinfo.gsf  \
+    qdims.gsf     \
+    qgxinfo.gsf   \
+    qgxout.gsf    \
+    qw2xy.gsf     \
+    rgnwrd.gsf    \
+    setstr.gsf    \
+    strmem.gsf    \
+    strrep.gsf    \
+    sublw.gsf     \
+    t2time.gsf    \
+    time2t.gsf    \
+    v2s.gsf       \
+    xmath_max.gsf \
+    xmath_min.gsf \
+    z2lev.gsf
+

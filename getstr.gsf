@@ -1,0 +1,4 @@
+function getstr( name )
+  rc = gsfallow( 'on' )
+  ret = strmem( get, name )
+return ret

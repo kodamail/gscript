@@ -1,0 +1,31 @@
+function days( year, month )
+
+  d.1  = 31
+  d.2  = 0
+  if( d.2 = 0 & math_fmod(year,400) = 0 ) ; d.2 = 29 ; endif
+  if( d.2 = 0 & math_fmod(year,100) = 0 ) ; d.2 = 28 ; endif
+  if( d.2 = 0 & math_fmod(year,4)   = 0 ) ; d.2 = 29 ; endif
+  if( d.2 = 0 ) ; d.2 = 28 ; endif
+  d.3  = 31
+  d.4  = 30
+  d.5  = 31
+  d.6  = 30
+  d.7  = 31
+  d.8  = 31
+  d.9  = 30
+  d.10 = 31
+  d.11 = 30
+  d.12 = 31
+
+  if( month != 'month' )
+    ret = d.month
+  else
+    ret = 0
+    m = 1
+    while( m <= 12 )
+      ret = ret + d.m
+      m = m + 1
+    endwhile
+  endif
+
+return ret

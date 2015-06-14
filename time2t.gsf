@@ -1,0 +1,17 @@
+function time2t( time )
+  'q dims'
+  line = sublin( result, 5 )
+  type = subwrd( line, 3 )
+  if( type = 'varying' )
+    t1 = subwrd( line, 11 )
+    t2 = subwrd( line, 13 )
+  else
+    t1 = subwrd( line, 9 )
+    t2 = subwrd( line, 9 )
+  endif
+  'set time 'time
+  'q dims'
+  line = sublin( result, 5 )
+  t    = subwrd( line, 9 )
+  'set t 't1' 't2
+return t

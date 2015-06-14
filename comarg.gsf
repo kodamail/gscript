@@ -1,0 +1,27 @@
+* get value from standard command arguements
+* target: string or number
+function comarg( args, target )
+  ret = ''
+
+  cnt = 0
+  i = 1
+  while( 1 )
+    arg = subwrd( args, i )
+    if( arg = '' ) ; break ; endif
+
+    if( substr( arg, 1, 1 ) = '-' )
+      key = substr( arg, 2, math_strlen(arg)-1 )
+      i = i + 1
+      val = subwrd( args, i )
+      if( key = target ) ; ret = val ; endif
+
+*      say 'ok: ' % key % ' : ' % val
+    else
+      cnt = cnt + 1
+      val = arg
+      if( cnt = target ) ; ret = val ; endif
+    endif
+
+    i = i + 1
+  endwhile
+return ret

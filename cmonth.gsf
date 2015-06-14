@@ -1,0 +1,174 @@
+function cmonth( month, size )
+  cmonth.1 = 'January'
+  cmonth.2 = 'February'
+  cmonth.3 = 'March'
+  cmonth.4 = 'April'
+  cmonth.5 = 'May'
+  cmonth.6 = 'June'
+  cmonth.7 = 'July'
+  cmonth.8 = 'August'
+  cmonth.9 = 'September'
+  cmonth.10 = 'October'
+  cmonth.11 = 'November'
+  cmonth.12 = 'December'
+
+  c = substr( month, 1, 1 )
+
+****************************************
+* integer(s) -> string
+****************************************
+  if( valnum(c) = 1 )
+
+*   month = 1, 2, 3, ..., or 12
+*   month < 1 or month > 12 is also accepted
+    if( valnum(month) = 1 )
+      month = month + 0
+      month = math_fmod( month-1, 12 ) + 1
+      ret = cmonth.month
+
+      if( size != 'size' & size != -1 )
+        ret = substr( ret, 1, size )
+      endif
+
+*   month = '12,1,2' = DJF, '6,7' = 'JJ' etc
+*   size: length per one month
+    else
+      m = 1
+      month.m = ''
+      length = math_strlen( month )
+      i = 1
+      while( i <= length )
+        c = substr( month, i, 1 )
+        if( c = ',' )
+          m = m + 1
+          month.m = ''
+        else
+          month.m = month.m % c
+        endif
+        i = i + 1
+      endwhile
+      mmax = m
+
+      m = 1
+      h = ''
+      ret = ''
+      while( m <= mmax )
+*        say m % ': ' % month.m
+        mm = month.m
+        if( size != 'size' )
+          ret = ret % h % substr( cmonth.mm, 1, size )
+        else
+          ret = ret % h % cmonth.mm
+        endif
+        if( size != 1 ) ; h = '-' ; endif
+        m = m + 1
+      endwhile
+    endif
+  
+****************************************
+* string -> integer(s)
+****************************************
+  else
+    month = chcase( month, 'upper_first' )
+    ret = -1
+    len_month = math_strlen( month )
+
+***** simgle month *****
+    m = 1
+    while( m <= 12 )
+      cmonth_tmp = substr( cmonth.m, 1, len_month )
+      if( cmonth_tmp = month )
+        if( ret != -1 ) ; ret = ret % '|' % m ; 
+        else ; ret = m ; endif
+      endif
+      m = m + 1
+    endwhile
+    if( ret != -1 ) ; return ret ; endif
+
+***** multi-month (e.g. DJF, Dec-Jan-Feb) *****
+* add '-' if necessary
+    length = math_strlen( month )
+    i = 1
+    tmp = ''
+    while( i <= length )
+      c = substr( month, i, 1 )
+      if( c = '-' ) ; break ; endif
+      if( i = length ) ; month = tmp % c ; endif
+      tmp = tmp % c % '-'
+      i = i + 1
+    endwhile
+
+*   convert
+    m = 1
+    month.m = ''
+    length = math_strlen( month )
+    i = 1
+    while( i <= length )
+      c = substr( month, i, 1 )
+      if( c = '-' )
+        m = m + 1
+        month.m = ''
+      else
+        month.m = month.m % c
+      endif
+      i = i + 1
+    endwhile
+    mmax = m
+    m = 1
+
+    while( m <= mmax )
+      month.m = chcase( month.m, 'upper_first' )
+      month.m = cmonth( month.m )
+
+*    m2: for multiple-candidate
+      length = math_strlen( month.m )
+      i = 1
+      m2 = 1
+      month.m.m2 = ''
+      while( i <= length )
+        c = substr( month.m, i, 1 )
+        if( c = '|' )
+          m2 = m2 + 1
+          month.m.m2 = ''
+        else
+          month.m.m2 = month.m.m2 % c
+        endif
+        i = i + 1
+      endwhile
+      m2 = m2 + 1
+      month.m.m2 = ''
+      m = m + 1
+    endwhile
+
+*   check for continuity
+    sm = 1
+    while( month.1.sm != '' & ret = -1 )
+      now = month.1.sm
+
+      cont = 1
+      ret = month.1.sm
+      m = 2
+      while( m <= mmax )
+        now = math_fmod( now + 1 + 1, 12 ) - 1
+        m2 = 1
+        while( month.m.m2 != '' )
+
+          if( month.m.m2 = now  )
+            ret = ret % ',' % month.m.m2
+            break
+          endif
+          m2 = m2 + 1
+          if( month.m.m2 = '' ) ; cont = 0 ; endif
+        endwhile
+
+        m = m + 1
+      endwhile
+
+      if( cont != 1 ) ; ret = -1 ; endif
+      sm = sm + 1
+    endwhile
+    if( ret != -1 ) ; return ret ; endif
+
+
+  endif
+return ret

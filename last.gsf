@@ -1,0 +1,12 @@
+function last()
+  'q files'
+  i = 1
+  fmax = 0
+  while( 1 )
+    line = sublin( result, i )
+    if( line = '' ) ; break ; endif
+    num  = subwrd( line, 2 )
+    if( num = fmax + 1 ) ; fmax = fmax + 1 ; endif
+    i = i + 1
+  endwhile
+return fmax

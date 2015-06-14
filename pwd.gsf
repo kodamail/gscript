@@ -1,0 +1,7 @@
+*
+* need libbase.gsf
+*
+function pwd()
+  rc = gsfallow( 'on' )
+  ret = libbase( 'pwd' )
+return ret
