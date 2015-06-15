@@ -1,0 +1,57 @@
+*
+* no specifiation of cmpver -> return GrADS version
+*
+* ver is newer than cmpver -> return 1
+* ver is same as cmpver    -> return 0
+* ver is older than cmpver -> return -1
+*
+function gradsver( cmpver )
+  ret = ''
+  rc = gsfallow('on')
+  'q config'
+
+  line = sublin( result, 1 )
+  ver  = subwrd( line,   2 )
+
+  if( cmpver = '' | cmpver = 'cmpvar' )
+    return ver
+  else
+    if( ver = cmpver ) ; return 0 ; endif
+
+    i = 1
+    while( i <= 4 )
+      ver.i = rgnwrd( ver, i, i, '.' )
+      cmpver.i = rgnwrd( cmpver, i, i, '.' )
+      ver.i    = subver2num( ver.i    )
+      cmpver.i = subver2num( cmpver.i )
+*      say ver.i % ' ' % cmpver.i
+      if( ver.i > cmpver.i ) ; return 1  ; endif
+      if( ver.i < cmpver.i ) ; return -1 ; endif
+
+      if( ver.i <= 91 )
+        say 'main version = 1 or less is not fully supported.'
+        return -9999
+      endif
+      i = i + 1
+    endwhile
+
+  endif
+
+return -9999
+
+
+
+function subver2num( subver )
+  pref = 'none'
+  if( valnum(subver) = 1 )
+    pref = 9
+  else
+    pref   = substr( subver, 1, 1 )
+    subver = substr( subver, 2, 1024 )
+    if( pref = 'v' ) ; pref = 9 ; endif
+    if( pref = 's' ) ; pref = 9 ; endif
+    if( pref = 'a' ) ; pref = 5 ; endif
+    if( pref = 'b' ) ; pref = 2 ; endif
+  endif
+  ret = pref % subver
+return ret
