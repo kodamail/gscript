@@ -4,6 +4,7 @@
 *      xdef
 *      ydef
 *      zdef
+*      edef
 *      tdef
 *      vars
 *      'var-name'
@@ -12,7 +13,7 @@
 *  num = 0: id itself
 *  num >= 1
 function qctlinfo( fn, id, num )
- _version = '0.03r2'
+ _version = '0.03r3'
 
 * check arguement
   if( valnum(fn) != 1 )
