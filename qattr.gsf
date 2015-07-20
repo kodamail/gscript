@@ -1,0 +1,44 @@
+*
+* qattr( fn, key, name )
+*
+* key = 'global', dimension name (e.g. 'lon'), or variable name 
+*
+function qattr( fn, key_in, name_in )
+ _version = '0.01r1'
+
+* check arguement
+  if( valnum(fn) != 1 )
+    say 'error: fn = ' % fn % ' is illegal.'
+    exit
+  endif
+  if( valnum(key_in) != 0 )
+    say 'error: key = ' % key_in % ' is illegal.'
+    exit
+  endif
+  if( valnum(name_in) != 0 )
+    say 'error: name = ' % name_in % ' is illegal.'
+    exit
+  endif
+
+  ret = ''
+
+* obtain control file information
+  'q attr 'fn
+  i = 2
+  stat = ''
+  while( i <= 10000 )
+    line = sublin( result, i )
+    if( line = '' ) ; break ; endif
+
+    key = subwrd( line, 1 )
+    if( key = key_in )
+      name = subwrd( line, 3 )
+      if( name = name_in )
+        ret = rgnwrd( line, 4, 10000 )
+        break
+      endif
+    endif
+    i = i + 1
+  endwhile
+
+return ret
