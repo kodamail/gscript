@@ -1,0 +1,10 @@
+function strtrim( str )
+  ret = str
+  len = math_strlen( ret )
+  while( len > 0 )
+    c = substr( ret, len, 1 )
+    if( c != ' ' ) ; break ; endif
+    ret = substr( ret, 1, len-1 )
+    len = len - 1
+  endwhile
+return ret
