@@ -1,10 +1,27 @@
-function strtrim( str )
+function strtrim( str, opt )
+  if( opt != 'l' & opt != 'r' ) ; opt = '' ; endif
   ret = str
-  len = math_strlen( ret )
-  while( len > 0 )
-    c = substr( ret, len, 1 )
-    if( c != ' ' ) ; break ; endif
-    ret = substr( ret, 1, len-1 )
-    len = len - 1
-  endwhile
+
+* trim right
+  if( opt = 'r' | opt = '' )
+    len = math_strlen( ret )
+    while( len > 0 )
+      c = substr( ret, len, 1 )
+      if( c != ' ' ) ; break ; endif
+      ret = substr( ret, 1, len-1 )
+      len = len - 1
+    endwhile
+  endif
+
+* trim left
+  if( opt = 'l' | opt = '' )
+    len = math_strlen( ret )
+    while( len > 0 )
+      c = substr( ret, 1, 1 )
+      if( c != ' ' ) ; break ; endif
+      ret = substr( ret, 2, len-1 )
+      len = len - 1
+    endwhile
+  endif
+
 return ret
