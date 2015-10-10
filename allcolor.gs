@@ -4,9 +4,9 @@
 function allcolor(args)
   _version='0.01r1'
 
-  if( args = '' )
-    help()
-  endif
+*  if( args = '' )
+*    help()
+*  endif
 
   imax = 20
   jmax = 10
