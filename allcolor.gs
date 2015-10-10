@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function allcolor(args)
-  _version='0.01r1'
+  _version='0.01r2'
 
 *  if( args = '' )
 *    help()
@@ -47,7 +47,7 @@ function help()
   say ' Usage:'
   say '   allcolor'
   say ''
-  say ' Copyright (C) 2009-2011 Chihiro Kodama'
+  say ' Copyright (C) 2009-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
