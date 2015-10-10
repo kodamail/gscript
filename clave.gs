@@ -112,9 +112,14 @@ function gettime( str, y )
   ret = str
   yret = -999
   ypp = y + 1
+  ymm = y - 1
 
   tmp = strrep( ret, '%ypp', ypp )
   if( ret != tmp ) ; yret = ypp ; endif
+  ret = tmp
+
+  tmp = strrep( ret, '%ymm', ymm )
+  if( ret != tmp ) ; yret = ymm ; endif
   ret = tmp
 
   tmp = strrep( ret, '%y', y )
@@ -148,9 +153,9 @@ function help()
   say ''
   say '     var_in      : variable'
   say '     time1 time2 : Seasonal time range'
-  say '                   %y or %ypp should be included. '
-  say '                   They will be replaced by a particular year'
-  say '                                            and the next year'
+  say '                   %y, %ypp, or %ymm should be included. '
+  say '                   They will be replaced by a particular year,'
+  say '                   the next year or the previous year.'
   say '                   %end, which will be replaced by the end of month, may be included.'
   say '                   e.g.  time1    time2'
   say '                         01jan%y  01feb%y    : January-mean (including 01feb)'
