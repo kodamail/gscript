@@ -1,0 +1,22 @@
+*return number of time steps within year/month.
+function tsteps( year, month )
+  rc = gsfallow( 'on' )
+  ypp = year + 1
+  
+  if( month = 'month' )
+    time1 = '00z01jan'year
+    time2 = '00z01jan'ypp
+
+  else
+    cm   = cmonth( month, 3 )
+    cmpp = cmonth( month+1, 3 )
+    time1 = '00z01'cm''year
+    if( month = 12 )
+      time2 = '00z01'cmpp''ypp
+    else
+      time2 = '00z01'cmpp''year
+    endif
+  endif
+
+  ret = time2t(time2) - time2t(time1)
+return ret
