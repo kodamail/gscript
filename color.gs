@@ -3,6 +3,7 @@
 *
 function color( args )
  _version = '0.07r3'
+  rc = gsfallow( 'on' )
 
   if( args = '' )
     help()
@@ -10,7 +11,7 @@ function color( args )
   endif
 
 ***** Default value *****
-  gxout  = 'shaded'
+  gxout  = ''
   kind   = 'blue->white->red'
   sample = 0
   var    = 'none'
@@ -207,10 +208,10 @@ function color( args )
   endif
 
 *** gxout
-  if( gxout != 'shaded' & gxout != 'contour' & gxout != 'grfill')
-    say 'error in color.gs: 'gxout' not supported !'
-    return
-  endif
+*  if( gxout != 'shaded' & gxout != 'contour' & gxout != 'grfill')
+*    say 'error in color.gs: 'gxout' not supported !'
+*    return
+*  endif
 
 
 ***** Calculate levels *****
@@ -245,6 +246,11 @@ function color( args )
     i = i + 1
   endwhile
 
+*** get gxout if necessary
+  if( gxout = '' )
+    gxout = qgxout( '2d-1expr' )
+    gxout = chcase( gxout, 'lower' )
+  endif
 
 **** one more color if gxout=shaded
   if( gxout = 'shaded' | gxout = 'grfill' )
@@ -426,7 +432,7 @@ function spcol( kind )
 
     i = i + 1
   endwhile
-  say kind2
+*  say kind2
 return ( kind2 )
 
 
