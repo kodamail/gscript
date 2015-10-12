@@ -13,6 +13,7 @@ function color( args )
 ***** Default value *****
   gxout  = ''
   kind   = 'blue->white->red'
+  alpha  = 255
   sample = 0
   var    = 'none'
   min    = 'none'
@@ -35,6 +36,7 @@ function color( args )
 *** option
       if( arg = '-gxout' ) ; gxout=subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-kind' )  ; kind=subwrd(args,i)  ; i=i+1 ; break ; endif
+      if( arg = '-alpha' ) ; alpha=subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-div' )   ; div=subwrd(args,i)   ; i=i+1 ; break ; endif
       if( arg = '-sample' ); sample=1 ; break     ; endif
       if( arg = '-ret' )   ; retflag=1 ; break    ; endif
@@ -246,20 +248,21 @@ function color( args )
     i = i + 1
   endwhile
 
-*** get gxout if necessary
+*** get gxout if necessary, or set gxout
   if( gxout = '' )
     gxout = qgxout( '2d-1expr' )
     gxout = chcase( gxout, 'lower' )
+  else
+    'set gxout 'gxout
   endif
 
-**** one more color if gxout=shaded
-  if( gxout = 'shaded' | gxout = 'grfill' )
+**** one more color if gxout=shaded etc.
+  if( gxout = 'grfill' | gxout = 'shaded' | gxout = 'shaded1' | gxout = 'shaded2' | gxout = 'shaded2b' )
     colnum = colnum + 1
     cols = cols % ' ' % (colnum+15)
   endif
 
 ***** Set levs/cols *****
-  'set gxout 'gxout
   'set clevs 'levs
   'set ccols 'cols
   say 'clevs='levs
@@ -345,7 +348,7 @@ function color( args )
       if( i = max - 1 ) ; enum = 16 + colnum - 1 ; endif
 *      say 'i=' % i
 *      say snum' 'enum
-      rgb = defcol( snum, scol, enum, ecol )
+      rgb = defcol( snum, scol, enum, ecol, alpha )
       ret = ret % rgb % ' '
       i = i + 1
     endwhile
@@ -477,10 +480,9 @@ return ( ret )
 *   ecol : end   color name
 *
 **********************************************
-function defcol( snum, scol, enum, ecol )
+function defcol( snum, scol, enum, ecol, defalpha )
 *  say snum'('scol') -> 'enum'('ecol')'
   diff = enum - snum
-*  if( diff < 1.0 )
   if( diff <= 0.0 )
     return
   endif
@@ -489,10 +491,14 @@ function defcol( snum, scol, enum, ecol )
   sr = colornum( scol, 'r' )
   sg = colornum( scol, 'g' )
   sb = colornum( scol, 'b' )
+  sa = colornum( scol, 'a' )
+  if( sa = -1 ) ; sa = defalpha ; endif
 
   er = colornum( ecol, 'r' )
   eg = colornum( ecol, 'g' )
   eb = colornum( ecol, 'b' )
+  ea = colornum( ecol, 'a' )
+  if( ea = -1 ) ; ea = defalpha ; endif
 
 *** set initial color number (integer)
 * e.g.,
@@ -501,13 +507,9 @@ function defcol( snum, scol, enum, ecol )
 *   i=16.9 -> 17
 *
   i = math_int( snum ) 
-*  if( i != 16 )
   if( snum != 16 )
     i = i + 1
   endif
-*  if( i != snum )
-*    i = i + 1
-*  endif
 
 *** set color
   ret = ''
@@ -515,13 +517,11 @@ function defcol( snum, scol, enum, ecol )
     r = math_nint( sr + (er-sr) * (i-snum) / diff )
     g = math_nint( sg + (eg-sg) * (i-snum) / diff )
     b = math_nint( sb + (eb-sb) * (i-snum) / diff )
-*    if( _verbose = 1 ) ; say i' r='r' g='g' b='b ; endif
+    a = math_nint( sa + (ea-sa) * (i-snum) / diff )
     if( _verbose = 1 ) ; say 'ccol=' % i % ' : (' % r % ',' % g % ',' % b % ')' ; endif
 
-
-   'set rgb 'i' 'r' 'g' 'b
-
-    ret = ret' 'i' 'r' 'g' 'b
+prex(   'set rgb 'i' 'r' 'g' 'b' 'a)
+    ret = ret' 'i' 'r' 'g' 'b' 'a
     i = i + 1
   endwhile
 
@@ -534,13 +534,13 @@ return ret
 * color -> rgb value table
 *
 *   color  : color name
-*   rgb    : "r" or "g" or "b"
+*   rgb    : "r" or "g" or "b" or "a"
 *
 *   return : rgb value
 *
 **********************************************
 function colornum( color, rgb )
-  r=-1; g=-1; b=-1
+  r=-1; g=-1; b=-1; a=-1
 
 *** define rgb value
   if( color = 'black')  ; r=0 ; g=0 ; b=0 ; endif
@@ -707,12 +707,15 @@ function colornum( color, rgb )
     r = rgb.1
     g = rgb.2
     b = rgb.3
+    a = rgb.4
   endif
 
 *** return  
   if( rgb = 'r' ); return( r ); endif
   if( rgb = 'g' ); return( g ); endif
   if( rgb = 'b' ); return( b ); endif
+  if( valnum(a) != 1 ) ; a = -1 ; endif
+  if( rgb = 'a' ); return( a ); endif
 
 return
 
@@ -725,8 +728,9 @@ function help()
   say '   color '_version' - set color'
   say ' '
   say ' Usage:'
-  say '   color [-gxout (contour|shaded|grfill)]'
+  say '   color [-gxout (contour | shaded | grfill)]'
   say '         [-kind kind]'
+  say '         [-alpha alpha]'
   say '         [-sample]'
   say '         [-div div]'
   say '         (-var variable | min max [int] | -levs lev1 lev2 ...)'
@@ -741,6 +745,7 @@ function help()
   say '                        You can specify number of color '
   say '                        between the two colors using -(n)-> :'
   say '                        e.g. white-(0)->blue->red'
+  say '     -alpha           : transparancy (0: transparent, 255: non-transparent)'
   say '     -sample          : draw color sample'
   say '     -var variable    : variable to draw'
   say '     -div div         : when "int" is not specified,'
@@ -758,7 +763,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This version is compatible with color.gs Ver 0.01 and after.'
   say ''
-  say ' Copyright (C) 2005-2013 Chihiro Kodama'
+  say ' Copyright (C) 2005-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
