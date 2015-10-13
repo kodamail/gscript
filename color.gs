@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function color( args )
- _version = '0.07r3'
+ _version = '0.08r1'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -78,7 +78,6 @@ function color( args )
 
     if( xcbar = '' ) ; break; endif
   endwhile
-
 
   if( xcbar = '' )
     start = 0
@@ -190,12 +189,6 @@ function color( args )
   endif
 
 *** special kind
-*  if( kind = 'bluered' ); kind='blue->white->red'; endif
-*  if( kind = 'rainbow' ); kind='blue->aqua->lime->yellow->red'; endif
-*  if( kind = 'redblue' ); kind='red->white->blue'; endif
-*  if( kind = 'grainbow' ); kind='(160,0,200)->(110,0,220)->(30,60,255)->(0,160,255)->(0,200,200)->(0,210,140)->(0,220,0)->(160,230,50)->(230,220,50)->(230,175,45)->(240,130,40)->(250,60,60)->(240,0,130)'; endif
-
-* replace special kind
   kind = spcol( kind )
 
 ***** Parameter check *****
@@ -208,13 +201,6 @@ function color( args )
     say 'error in color.gs: multiple definition of color levels'
     return
   endif
-
-*** gxout
-*  if( gxout != 'shaded' & gxout != 'contour' & gxout != 'grfill')
-*    say 'error in color.gs: 'gxout' not supported !'
-*    return
-*  endif
-
 
 ***** Calculate levels *****
   if( levs = '' )
@@ -306,9 +292,7 @@ function color( args )
             col.i = substr( col.i, 1, l-2 )
           endif
         endif
-
       endif
-
       i = i + 1
     endwhile
 
@@ -353,7 +337,6 @@ function color( args )
       i = i + 1
     endwhile
 
-
 ***** display color sample *****
   if( sample = 1 )
     i = 0
@@ -364,7 +347,6 @@ function color( args )
       i = i + 1
     endwhile
   endif
-
 
 ***** run xcbar.gs *****
   if( xcbar != 'none' )
@@ -382,7 +364,6 @@ function color( args )
       levcol = levcol % ' ' % (i+15)
 
     else
-
       i = 1
       while( i < colnum )
         levcol = levcol % ' ' % (i+15) % ' ' % subwrd(levs,i)
@@ -396,10 +377,7 @@ function color( args )
     'xcbar 'xcbar' -levcol 'levcol
   endif
 
-  if( retflag = 1 )
-    return ret
-  endif
-
+  if( retflag = 1 ) ; return ret ; endif
 
 return
 
@@ -468,8 +446,6 @@ function getcol( kind, num )
 return ( ret )
 
 
-
-
 **********************************************
 *
 * define color
@@ -526,7 +502,6 @@ prex(   'set rgb 'i' 'r' 'g' 'b' 'a)
   endwhile
 
 return ret
-
 
 
 **********************************************
@@ -725,43 +700,43 @@ return
 *
 function help()
   say ' Name:'
-  say '   color '_version' - set color'
+  say '   color '_version' - Set color table for drawing.'
   say ' '
   say ' Usage:'
-  say '   color [-gxout (contour | shaded | grfill)]'
-  say '         [-kind kind]'
-  say '         [-alpha alpha]'
-  say '         [-sample]'
-  say '         [-div div]'
-  say '         (-var variable | min max [int] | -levs lev1 lev2 ...)'
-  say '         [-verbose | -v]'
-  say '         [-xcbar xcba-args]'
+  say '   color'
+  say '       (min max [int] | -levs lev1 lev2 ... | -var var-name)'
+  say '       [-div value]'
+  say '       [-gxout gxout-name]'
+  say '       [-kind string] [-alpha value]'
+  say '       [-sample] [-xcbar xcbar-args]'
+  say '       [-ret]'
+  say '       [-verbose | -v]'
   say ''
-  say '     -gxout           : type of gxout'
-  say '     -kind kind       : color list, '
-  say '                        or color name or rgb value connected with "->".'
+  say '     min max [int]    : Minimum, maximum and interval of values.'
+  say '     -levs lev1 lev2 ... '
+  say '                      : Levels of variable value.'
+  say '     -var var-name    : Name of variable to draw'
+  say '     -div div         : When "int" is not specified,'
+  say '                        [min:max] is divided by "div" (default: 10)'
+  say '     -gxout gxout-name: Type of gxout'
+  say '     -kind kind       : One color list name, '
+  say '                        or color list name, color name, and/or rgb(a) values connected with "->".'
   say '                        e.g., blue->white->red, bluered,'
   say '                              (200,100,100)->red->(0.0,0)'
   say '                        You can specify number of color '
   say '                        between the two colors using -(n)-> :'
   say '                        e.g. white-(0)->blue->red'
-  say '     -alpha           : transparancy (0: transparent, 255: non-transparent)'
-  say '     -sample          : draw color sample'
-  say '     -var variable    : variable to draw'
-  say '     -div div         : when "int" is not specified,'
-  say '                        [min:max] is divided by "div" (default: 10)'
-  say '     min max [int]    : minimum and maximum values of the graphic'
-  say '     -levs lev1 lev2 ... '
-  say '                      : levels'
-  say '     -verbose         : verbose mode'
-  say '     -ret             : pretend to be script function.'
-  say '     -xcbar xcbar-args: run xcbar.gs to draw color bar.'
+  say '     -alpha           : Transparancy (0: transparent, 255: non-transparent)'
+  say '     -sample          : Draw color table'
+  say '     -xcbar xcbar-args: Run xcbar.gs to draw color bar.'
   say '                        xcbar.gs is necessary.'
+  say '     -ret             : Pretend to be script function.'
+  say '     -verbose         : Verbose mode'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
-  say '   This version is compatible with color.gs Ver 0.01 and after.'
+  say '   This version is compatible with color.gs Ver 0.01 and after except gxout default value.'
   say ''
   say ' Copyright (C) 2005-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
