@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function cutdata( args )
- _version = '0.01b2'
+ _version = '0.01r1'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -21,10 +21,10 @@ function cutdata( args )
   tmax = -9999
   timemin = ''
   timemax = ''
-  ctl_in = ''
+  ctl_in  = ''
   grd_out = ''
-  vnames = ''
-  undef = ''
+  vnames  = ''
+  undef   = ''
 
 ***** Arguement *****
   i = 1
@@ -218,31 +218,29 @@ function help()
   say '           [-y ymin ymax]'
   say '           [-z zmin zmax]'
   say '           [-t tmin tmax]'
-  say '           [-t timestep-range]'
-  say '           [-time timemin tmimeax]'
-  say '           [-time time-range]'
+  say '           [-t timestep-range | -time timemin tmimeax | -time time-range]'
   say '           [-var vname1,vname2,...]'
   say '           [-undef undefined-value]'
   say ''
-  say '     input-ctl        : control file name for input'
-  say '     output-grd       : output flat-binary file name'
-  say '                        cutdata.gs stops if output-grd already exists.'
-  say '     -x xmin xmax     : x range to cut'
-  say '     -y ymin ymax     : y range to cut'
-  say '     -z zmin zmax     : z range to cut'
-  say '     -t tmin tmax     : time step range to cut'
-  say '     -t timestep-range: time step range to cut.'
+  say '     input-ctl        : Control file name for input.'
+  say '     output-grd       : Output flat-binary file name'
+  say '                        cutdata.gs stops if the file already exists.'
+  say '     -x xmin xmax     : X range to cut.'
+  say '     -y ymin ymax     : Y range to cut.'
+  say '     -z zmin zmax     : Z range to cut.'
+  say '     -t tmin tmax     : Time step range to cut.'
+  say '     -t timestep-range: Time step range to cut.'
   say '                        e.g. [1-3]: 1<=t<=3 is stored'
   say '                        e.g. [1-3): 1<=t<3 is stored'
   say '     -time timemin timemax '
-  say '                      : time range to cut'
-  say '     -time time-range:  time range to cut.'
+  say '                      : Time range to cut.'
+  say '     -time time-range:  Time range to cut.'
   say '                        e.g. [01jan2000-02jan2000]: 01jan2000<=time<=02jan2000 is stored'
   say '                        e.g. [01jan2000-02jan2000): 01jan2000<=t<02jan2000 is stored'
   say '     -var vname1,vname2,...'
-  say '                      : list of variable names to cut'
+  say '                      : List of variable names to cut'
   say '     -undef undefined-value'
-  say '                      : set undefined value'
+  say '                      : Undefined value for output data.'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
@@ -253,12 +251,3 @@ function help()
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
-
-* for debug:
-* cutdata.gs /mwork0/ngatm/JMA/JRA55/ctl/anl_p_ugrd.ctl test.grd -t 1 3
-* cutdata.gs /mwork0/ngatm/JMA/JRA55/ctl/anl_surf125.ctl test.grd -t 1 3
-
-* cutdata.gs /mwork0/ngatm/JMA/JRA55/ctl/anl_p_ugrd.ctl test.grd 
-*-time [00z01jan2000-18z01jan2000)
-* -t [2-3]
-
