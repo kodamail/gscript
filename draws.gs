@@ -27,11 +27,11 @@ function draws(args)
 
     while(1)
 *** option
-      if( arg = '-pos')     ; pos=subwrd(args,i); i=i+1; break; endif
-      if( arg = '-base')    ; base=subwrd(args,i); i=i+1; break; endif
-      if( arg = '-xoffset') ; xoffset=subwrd(args,i); i=i+1; break; endif
-      if( arg = '-yoffset') ; yoffset=subwrd(args,i); i=i+1; break; endif
-      if( arg = '-color')   ; color=subwrd(args,i); i=i+1; break; endif
+      if( arg = '-base' )    ; base  = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-color' )   ; color = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-pos' )     ; pos   = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-xoffset' | arg = '-xo' ) ; xoffset = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-yoffset' | arg = '-yo' ) ; yoffset = subwrd(args,i); i=i+1; break; endif
 
       flag = 1
       i = i - 1
@@ -159,7 +159,7 @@ function help()
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2009 Chihiro Kodama'
+  say ' Copyright (C) 2009-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
