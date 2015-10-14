@@ -3,7 +3,7 @@
 *
 function draws(args)
 
-  _version='0.02r2'
+  _version='0.03r1'
 
   if( args = '' )
     help()
@@ -11,11 +11,12 @@ function draws(args)
   endif
 
 ***** Default value *****
-  pos = 'tc'
-  base = 'none'
+  pos     = 'tc'
+  base    = 'none'
   xoffset = 0
   yoffset = 0
-  color = 1
+  color   = 1
+  setfont = ""
 
 ***** Arguement *****
   i=1
@@ -27,9 +28,10 @@ function draws(args)
 
     while(1)
 *** option
-      if( arg = '-base' )    ; base  = subwrd(args,i); i=i+1; break; endif
-      if( arg = '-color' )   ; color = subwrd(args,i); i=i+1; break; endif
-      if( arg = '-pos' )     ; pos   = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-base'    ) ; base    = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-color'   ) ; color   = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-pos'     ) ; pos     = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-setfont' ) ; setfont = subwrd(args,i); i=i+1; break; endif
       if( arg = '-xoffset' | arg = '-xo' ) ; xoffset = subwrd(args,i); i=i+1; break; endif
       if( arg = '-yoffset' | arg = '-yo' ) ; yoffset = subwrd(args,i); i=i+1; break; endif
 
@@ -87,50 +89,53 @@ function draws(args)
 
 
 ***** Get gxinfo *****
-'q gxinfo'
-temp = sublin(result, 3)
-xmin = subwrd(temp, 4)
-xmax = subwrd(temp, 6)
-temp = sublin(result, 4)
-ymin = subwrd(temp, 4)
-ymax = subwrd(temp, 6)
+  'q gxinfo'
+  temp = sublin(result, 3)
+  xmin = subwrd(temp, 4)
+  xmax = subwrd(temp, 6)
+  temp = sublin(result, 4)
+  ymin = subwrd(temp, 4)
+  ymax = subwrd(temp, 6)
 
-if( pos = 'tc' )
-  x = xmin + 0.5 * (xmax - xmin) + xoffset
-  y = ymax + 0.1 + yoffset
-endif
-if( pos = 'bc' )
-  x = xmin + 0.5 * (xmax - xmin) + xoffset
-  y = ymin - 0.1 + yoffset
-endif
-if( pos = 'tl' )
-  x = xmin + xoffset
-  y = ymax + 0.1 + yoffset
-endif
-if( pos = 'bl' )
-  x = xmin + xoffset
-  y = ymin - 0.1 + yoffset
-endif
-if( pos = 'tr' )
-  x = xmax + xoffset
-  y = ymax + 0.1 + yoffset
-endif
-if( pos = 'br' )
-  x = xmax + xoffset
-  y = ymin - 0.1 + yoffset
-endif
-if( pos = 'l' )
-  x = xmin - 0.1 + xoffset
-  y = ymin + 0.5 * ( ymax - ymin ) + yoffset
-endif
-if( pos = 'r' )
-  x = xmax + 0.1 + xoffset
-  y = ymin + 0.5 * ( ymax - ymin ) + yoffset
-endif
+  if( pos = 'tc' )
+    x = xmin + 0.5 * (xmax - xmin) + xoffset
+    y = ymax + 0.1 + yoffset
+  endif
+  if( pos = 'bc' )
+    x = xmin + 0.5 * (xmax - xmin) + xoffset
+    y = ymin - 0.1 + yoffset
+  endif
+  if( pos = 'tl' )
+    x = xmin + xoffset
+    y = ymax + 0.1 + yoffset
+  endif
+  if( pos = 'bl' )
+    x = xmin + xoffset
+    y = ymin - 0.1 + yoffset
+  endif
+  if( pos = 'tr' )
+    x = xmax + xoffset
+    y = ymax + 0.1 + yoffset
+  endif
+  if( pos = 'br' )
+    x = xmax + xoffset
+    y = ymin - 0.1 + yoffset
+  endif
+  if( pos = 'l' )
+    x = xmin - 0.1 + xoffset
+    y = ymin + 0.5 * ( ymax - ymin ) + yoffset
+  endif
+  if( pos = 'r' )
+    x = xmax + 0.1 + xoffset
+    y = ymin + 0.5 * ( ymax - ymin ) + yoffset
+  endif
 
 ***** draw *****
-'set string 'color' 'base
-'draw string 'x' 'y' 'str
+  'set string 'color' 'base
+  if( setfont != "" )
+    'setfont 'setfont' -base 'base
+  endif
+  'draw string 'x' 'y' 'str
 
 return
 
