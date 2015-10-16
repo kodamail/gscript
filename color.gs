@@ -496,7 +496,7 @@ function defcol( snum, scol, enum, ecol, defalpha )
     a = math_nint( sa + (ea-sa) * (i-snum) / diff )
     if( _verbose = 1 ) ; say 'ccol=' % i % ' : (' % r % ',' % g % ',' % b % ')' ; endif
 
-prex(   'set rgb 'i' 'r' 'g' 'b' 'a)
+   'set rgb 'i' 'r' 'g' 'b' 'a
     ret = ret' 'i' 'r' 'g' 'b' 'a
     i = i + 1
   endwhile
