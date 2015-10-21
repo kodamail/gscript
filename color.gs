@@ -238,6 +238,8 @@ function color( args )
   if( gxout = '' )
     gxout = qgxout( '2d-1expr' )
     gxout = chcase( gxout, 'lower' )
+*   This seems to be a GrADS's bug when mproj = nps.
+    if( gxout = '16' ) ; gxout = 'shaded' ; endif
   else
     'set gxout 'gxout
   endif
