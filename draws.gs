@@ -2,8 +2,7 @@
 * Help is in the end of this script
 *
 function draws(args)
-
-  _version='0.03r1'
+  _version='0.04r1'
 
   if( args = '' )
     help()
@@ -16,7 +15,8 @@ function draws(args)
   xoffset = 0
   yoffset = 0
   color   = 1
-  setfont = ""
+  setfont = ''
+  angle   = ''
 
 ***** Arguement *****
   i=1
@@ -28,6 +28,7 @@ function draws(args)
 
     while(1)
 *** option
+      if( arg = '-angle'   ) ; angle   = subwrd(args,i); i=i+1; break; endif
       if( arg = '-base'    ) ; base    = subwrd(args,i); i=i+1; break; endif
       if( arg = '-color'   ) ; color   = subwrd(args,i); i=i+1; break; endif
       if( arg = '-pos'     ) ; pos     = subwrd(args,i); i=i+1; break; endif
@@ -131,9 +132,17 @@ function draws(args)
   endif
 
 ***** draw *****
-  'set string 'color' 'base
+  if( angle = '' )
+    'set string 'color' 'base
+  else
+    'set string 'color' 'base'  3 'angle
+  endif
   if( setfont != "" )
-    'setfont 'setfont' -base 'base
+    if( angle = '' )
+      'setfont 'setfont' -base 'base
+    else
+      'setfont 'setfont' -base 'base' -angle 'angle
+    endif
   endif
   'draw string 'x' 'y' 'str
 
@@ -147,18 +156,25 @@ function help()
   say '   draws '_version' - draw string at the position specified relative to the figure'
   say ' '
   say ' Usage:'
-  say '   draws [-pos position] [-base base] [-xoffset xoffset] [-yoffset yoffset] [-color color] string'
+  say '   draws'
+  say '     [-pos position] [-base base]'
+  say '     [(-xoffset | -xo) xoffset] [(-yoffset | -yo) yoffset]'
+  say '     [-color color] [-setfont size] [-angle angle]'
+  say '     string'
   say ' '
-  say '     position    : position to draw string (default: tc)'
+  say '     position    : Position to draw string. Default value is "tc".'
   say '                   tc: top center,  bc: buttom center,'
   say '                   tl: top left,    bl: buttom left,'
   say '                   tr: top right,   br: buttom right,'
   say '                    l:left,          r: right'
-  say '     base        : base position of the string (default: bc if position=tc) '
-  say '                   how to specify is same as -pos'
-  say '     xoffset     : horizontal offset (default: 0)'
-  say '     yoffset     : vertical offset (default: 0)'
-  say '     color       : font color (default: 1)'
+  say '     base        : Base position of the string.'
+  say '                   How to specify is same as position.'
+  say '     xoffset     : Horizontal offset. Default value is 0.'
+  say '     yoffset     : Vertical offset. Default value is 0.'
+  say '     color       : Font color. Default value is 1.'
+  say '     size        : Size for setfont.gs.'
+  say '     angle       : Rotation angle of string in degree. Default value is 0.'
+  say '     string      : String to draw. Specify it as the last option.'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
