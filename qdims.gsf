@@ -1,4 +1,6 @@
 * id = fnum
+*      varying/fixed : number of varying/fixed dimensions
+*
 *      xtype
 *      lonmin, lonmax
 *      xmin, xmax
@@ -9,10 +11,24 @@
 *      e
 function qdims( id )
   ret = ''
+
   'q dims'
+
   if( id = 'fnum' )
     line = sublin( result, 1 )
     ret = subwrd( line, 5 )
+    return ret
+  endif
+
+  if( id = 'varying' | id = 'fixed' )
+    ret = 0
+    i = 2
+    while( i <= 6 )
+      line = sublin( result, i )
+      stat = subwrd( line, 3 )
+      if( stat = id ) ; ret = ret + 1 ; endif
+      i = i + 1
+    endwhile
     return ret
   endif
 
@@ -22,15 +38,12 @@ function qdims( id )
   if( id = 'ytype' | id = 'latmin' | id = 'latmax' | id = 'ymin' | id = 'ymax' )
     line = sublin( result, 3 )
   endif
-
   if( id = 'ztype' | id = 'levmin' | id = 'levmax' | id = 'zmin' | id = 'zmax' )
     line = sublin( result, 4 )
   endif
-
   if( id = 'ttype' | id = 'timemin' | id = 'timemax' | id = 'tmin' | id = 'tmax' )
     line = sublin( result, 5 )
   endif
-
   if( id = 'etype' | id = 'ensmin' | id = 'ensmax' | id = 'emin' | id = 'emax' )
     line = sublin( result, 6 )
   endif
