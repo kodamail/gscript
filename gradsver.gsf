@@ -1,4 +1,6 @@
 *
+* cmpver: e.g., "v2.1.a1"
+*
 * no specifiation of cmpver -> return GrADS version
 *
 * ver is newer than cmpver -> return 1
@@ -7,13 +9,13 @@
 *
 function gradsver( cmpver )
   ret = ''
-  rc = gsfallow('on')
-  'q config'
+  rc = gsfallow( 'on' )
 
+  'q config'
   line = sublin( result, 1 )
   ver  = subwrd( line,   2 )
 
-  if( cmpver = '' | cmpver = 'cmpvar' )
+  if( cmpver = '' | cmpver = 'cmpver' )
     return ver
   else
     if( ver = cmpver ) ; return 0 ; endif
@@ -28,7 +30,7 @@ function gradsver( cmpver )
       if( ver.i > cmpver.i ) ; return 1  ; endif
       if( ver.i < cmpver.i ) ; return -1 ; endif
 
-      if( ver.i <= 91 )
+      if( i = 1 & ver.i <= 91 )
         say 'main version = 1 or less is not fully supported.'
         return -9999
       endif
