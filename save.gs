@@ -2,8 +2,8 @@
 * Help is in the end of this script.
 *
 function save( args )
-
-  _version='0.02r2'
+  _version = '0.03r1'
+  rc = gsfallow( 'on' )
 
   if( args = '' )
     help()
@@ -13,12 +13,16 @@ function save( args )
 *** arguements ***
   fhead = subwrd( args, 1 )
 
-*** save ***
-  'enable print 'fhead'.gmf'
-  'print'
-  'disable'
-  '!gxeps -c -i 'fhead'.gmf -o 'fhead'.eps'
-  '!rm -f 'fhead'.gmf'
+  if( gradsver( 'v2.1.a1' ) = 1 )
+    'gxprint 'fhead'.eps white'
+
+  else
+    'enable print 'fhead'.gmf'
+    'print'
+    'disable'
+    '!gxeps -c -i 'fhead'.gmf -o 'fhead'.eps'
+    '!rm -f 'fhead'.gmf'
+  endif
 
 return
 
@@ -27,7 +31,7 @@ return
 *
 function help()
   say ' Name:'
-  say '   save '_version' - save image as eps format'
+  say '   save '_version' - Save image as eps format.'
   say ' '
   say ' Usage:'
   say '   save file-head'
@@ -40,7 +44,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This function uses gxeps command.'
   say ''
-  say ' Copyright (C) 2009 Chihiro Kodama'
+  say ' Copyright (C) 2009-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
