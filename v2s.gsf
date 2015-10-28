@@ -1,4 +1,9 @@
 function v2s( var )
+  rc = gsfallow( 'on' )
+  pre = qgxout( '2d-1expr' )
+  if( pre = 'Fwrite' )
+    'set gxout contour'
+  endif
   'd 'var
   check.1 = subwrd( result, 1 )
   check.2 = subwrd( result, 2 )
@@ -6,6 +11,9 @@ function v2s( var )
     value = subwrd( result, 4 )
   else
     value = 'error: var does not seem to be a single value.'
+  endif
+  if( pre = 'Fwrite' )
+    'set gxout 'pre
   endif
   return value
 end function
