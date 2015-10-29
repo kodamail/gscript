@@ -2,7 +2,8 @@
 * help is in the end of this script
 *
 function setfont( args )
-  _version='0.01r2'
+  _version = '0.02r1'
+  rc = gsfallow( 'on' )
 
   if( args = '' )
     help()
@@ -11,7 +12,8 @@ function setfont( args )
 
 ***** Default value *****
   angle = 0
-  base = 'c'
+  base  = 'c'
+  color = 1
 
 ***** Arguement *****
   type = subwrd(args,1)
@@ -22,7 +24,8 @@ function setfont( args )
     i = i + 1
 
     if( arg = "-angle" ) ; angle = subwrd( args, i ) ; i = i + 1 ; endif
-    if( arg = "-base" )  ; base = subwrd( args, i ) ; i = i + 1 ; endif
+    if( arg = "-base"  ) ; base  = subwrd( args, i ) ; i = i + 1 ; endif
+    if( arg = "-color" ) ; color = subwrd( args, i ) ; i = i + 1 ; endif
   endwhile
 
 
@@ -56,13 +59,18 @@ function setfont( args )
     thickness = 9.0
   endif
 
+  pt = strrep( type, 'pt', '' )
+  if( type != pt )
+    width  = pt / 72.0
+    height = width
+    thickness = math_int( width * 30 )
+    if( thickness > 12 ) ; thickness = 12 ; endif
+  endif
+
   'set strsiz 'width' 'height
-  'set string 1 'base' 'thickness' 'angle
+  'set string 'color' 'base' 'thickness' 'angle
 
 return
-
-
-
 
 
 *
@@ -70,20 +78,21 @@ return
 *
 function help()
   say ' Name:'
-  say '   setfont '_version' - set font property'
+  say '   setfont '_version' - Set font property'
   say ' '
   say ' Usage:'
   say '   setfont size [-angle angle] [-base string-base]'
   say ''
-  say '     size              : tiny, small, normal, large or huge '
+  say '     size              : tiny, small, normal, large, huge, or e.g., 10pt '
   say '     -angle angle      : string angle (0<=angle<360)'
   say '     -base string-base : string base (c, tl, bc, etc...), default=c'
+  say '     -color color-num  : color number'
   say ''
   say ' Note:'
   say '     [arg-name]       : specify if needed'
   say '     (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2009 Chihiro Kodama'
+  say ' Copyright (C) 2009-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
