@@ -2,7 +2,8 @@
 * Help is in the end of this script.
 *
 function xcbar( args )
-  _version='0.07r5'
+  _version = '0.08r1'
+  rc = gsfallow( 'on' )
 
   if( args = '' )
     help()
@@ -19,149 +20,132 @@ function xcbar( args )
   cnum = -1
   fxoffset = 0
   fyoffset = 0
+  xoffset  = 0
+  yoffset  = 0
 
 ***** Arguement *****
-* position
-*  xmin = subwrd( args, 1 )
-*  xmax = subwrd( args, 2 )
-*  ymin = subwrd( args, 3 )
-*  ymax = subwrd( args, 4 )
-*  temp = subwrd( args, 5 )
+  i = 1
+  arg = 'dummy'
+  while( 1 )
+    arg = subwrd( args, i )
+    i = i + 1
+    if( arg = '' ); break; endif
 
-*  if( valnum(temp) = 0 )
-*** Usage 1 ***
-*    i = 5
-    i = 1
-    arg = 'dummy'
     while( 1 )
-
-      arg = subwrd( args, i )
-      i = i + 1
-      if( arg = '' ); break; endif
-
-      while( 1 )
-
-        if( arg = '-direction' | arg = '-dir' )
-          direction = subwrd( args, i )
-          if( direction = 'h' ); direction = 'horizontal'; endif
-          if( direction = 'v' ); direction = 'vertical'; endif
+      if( arg = '-direction' | arg = '-dir' )
+        direction = subwrd( args, i )
+        if( direction = 'h' ); direction = 'horizontal'; endif
+        if( direction = 'v' ); direction = 'vertical'; endif
+        i = i + 1
+        break
+      endif
+      if( arg = '-edge' )
+        edge = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fwidth' | arg = '-fw' )
+        fwidth = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fheight' | arg = '-fh' )
+        fheight = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fthickness' | arg = '-ft' )
+        fthickness = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fskip' | aarg = '-fstep' | arg = '-fs' )
+        fstep = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-foffset' | arg = '-fo' )
+        foffset = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fcolor' | arg = '-fc' )
+        fcolor = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fxoffset' | arg = '-fx' )
+        fxoffset = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fyoffset' | arg = '-fy' )
+        fyoffset = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-line' )
+        tmp = subwrd( args, i )
+        if( tmp = 'on' | tmp = 'off' )
+          line = tmp
           i = i + 1
-          break
+        else
+          line = 'on'
         endif
-        if( arg = '-edge' )
-          edge = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fwidth' | arg = '-fw' )
-          fwidth = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fheight' | arg = '-fh' )
-          fheight = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fthickness' | arg = '-ft' )
-          fthickness = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fstep' | arg = '-fs' )
-          fstep = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-foffset' | arg = '-fo' )
-          foffset = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fcolor' | arg = '-fc' )
-          fcolor = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fxoffset' | arg = '-fx' )
-          fxoffset = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-fyoffset' | arg = '-fy' )
-          fyoffset = subwrd( args, i )
-          i = i + 1
-          break
-        endif
-        if( arg = '-line' )
-          tmp = subwrd( args, i )
-          if( tmp = 'on' | tmp = 'off' )
-            line = tmp
-            i = i + 1
-          else
-            line = 'on'
+        break
+      endif
+      if( arg = '-linecolor' | arg = '-lc' )
+        linecolor = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-levcol' )
+*       color(1) level(1) color(2) level(2) ... level(cnum-1) color(cnum)
+        cnum = 1
+        while( 1 )
+          col.cnum = subwrd( args, i )
+          if( valnum(col.cnum) = 0 )
+            say 'Error in xcbar.gs: Syntax error in -levcol'
+            return
           endif
-*          line = subwrd( args, i )
-*          i = i + 1
-          break
-        endif
-        if( arg = '-linecolor' | arg = '-lc' )
-          linecolor = subwrd( args, i )
           i = i + 1
-          break
-        endif
-
-        if( arg = '-levcol' )
-*         color(1) level(1) color(2) level(2) ... level(cnum-1) color(cnum)
-          cnum = 1
-          while( 1 )
-            col.cnum = subwrd( args, i )
-            if( valnum(col.cnum) = 0 )
-              say 'Error in xcbar.gs: Syntax error in -levcol'
-              return
-            endif
-            i = i + 1
-            hi.cnum = subwrd( args, i )
-            if( valnum(hi.cnum) = 0 ); break; endif
-            cnum = cnum + 1
-            i = i + 1
-          endwhile
-          break
-        endif
-
-        if( valnum(arg) != 0 & xmin = 'none' )
-          xmin = arg
-          break
-        endif
-
-        if( valnum(arg) != 0 & xmax = 'none' )
-          xmax = arg
-          break
-        endif
-        
-        if( valnum(arg) != 0 & ymin = 'none' )
-          ymin = arg
-          break
-        endif
-
-        if( valnum(arg) != 0 & ymax = 'none' )
-          ymax = arg
-          break
-        endif
-
-        say 'syntax error: 'arg
-        return
-
-      endwhile
+          hi.cnum = subwrd( args, i )
+          if( valnum(hi.cnum) = 0 ); break; endif
+          cnum = cnum + 1
+          i = i + 1
+        endwhile
+        break
+      endif
+      if( arg = '-xoffset' | arg = '-xo' )
+        xoffset = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-yoffset' | arg = '-yo' )
+        yoffset = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( valnum(arg) != 0 & xmin = 'none' )
+        xmin = arg
+        break
+      endif
+      if( valnum(arg) != 0 & xmax = 'none' )
+        xmax = arg
+        break
+      endif
+      if( valnum(arg) != 0 & ymin = 'none' )
+        ymin = arg
+        break
+      endif
+      if( valnum(arg) != 0 & ymax = 'none' )
+        ymax = arg
+        break
+      endif
+      say 'syntax error: 'arg
+      return
     endwhile
-*  else
-*** Usage 2 ***
-* font size
-*    fwidth  = subwrd( args, 5 )
-*    fheight = subwrd( args, 6 )
-*    fstep   = subwrd( args, 7 )
-*    foffset = subwrd( args, 8 )
-*  endif
+  endwhile
 
 
 *** get shade information ***
@@ -235,8 +219,11 @@ function xcbar( args )
       xmax = xsize / 2 + x1wid * cnum / 2
 
     endif
-
   endif
+  xmin = xmin + xoffset
+  xmax = xmax + xoffset
+  ymin = ymin + yoffset
+  ymax = ymax + yoffset
 
 *** determine direction if necessary ***
   if( direction != 'horizontal' & direction != 'vertical' )
@@ -308,11 +295,6 @@ function xcbar( args )
   ydif = ydir * (ymax-ymin) / cnum
 
 
-* position of the fonts
-*  xmoji = xmin + fwidth * ydir
-*  ymoji = ymin - fheight * xdir
-
-
 *** draw ***
   i = 1
   x1 = xmin - xdif
@@ -328,9 +310,6 @@ function xcbar( args )
     xmoji = x2 + ( 0.5 * fwidth ) * ydir + fxoffset
     ymoji = ( y1 - 0.5 * fheight ) * xdir + y2 * ydir + fyoffset
 
-*    rec = sublin( shdinfo, i+1 )
-*    col = subwrd( rec, 1 )
-*    hi = subwrd( rec, 3 )
     'set line 'col.i
     'set strsiz 'fwidth' 'fheight
 
@@ -389,10 +368,11 @@ function xcbar( args )
           xc = x1 + ( y2 - y1 )
           yc = y1 + 0.5 * ( y2 - y1 )
           radius = 0.5 * ( y2 - y1 )
-          'draw recf 'xc' 'y1' 'x2' 'y2
-*              say x1 % ' ' % x2 % ' ' % y1 % ' ' % y2
-*say          'draw recf 'xc' 'y1' 'x2' 'y2
-*exit
+          if( xc < x2 )
+            'draw recf 'xc' 'y1' 'x2' 'y2
+          else
+            xc = x2
+          endif
           circle = circle( xc, yc, radius, 90, 270, 6 )
           'draw polyf 'circle
           if( line = 'on' ) ; drawpoly( linecolor' 'x2' 'y2' 'circle' 'x2' 'y1 ) ; endif
@@ -401,7 +381,11 @@ function xcbar( args )
           xc = x2 - ( y2 - y1 )
           yc = y1 + 0.5 * ( y2 - y1 )
           radius = 0.5 * ( y2 - y1 )
-          'draw recf 'x1' 'y1' 'xc' 'y2
+          if( x1 < xc )
+            'draw recf 'x1' 'y1' 'xc' 'y2
+          else
+            xc = x1
+          endif
           circle = circle( xc, yc, radius, 270, 450, 6 )
           'draw polyf 'circle
           if( line = 'on' ) ; drawpoly( linecolor' 'x1' 'y1' 'circle' 'x1' 'y2) ; endif
@@ -413,7 +397,11 @@ function xcbar( args )
           xc = x1 + 0.5 * ( x2 - x1 )
           yc = y1 + 0.5 * ( x2 - x1 )
           radius = 0.5 * ( x2 - x1 )
-          'draw recf 'x1' 'yc' 'x2' 'y2
+          if( yc < y2 )
+            'draw recf 'x1' 'yc' 'x2' 'y2
+          else
+            yc = y2
+          endif
           circle = circle( xc, yc, radius, 180, 360, 6 )
           'draw polyf 'circle
           if( line = 'on' ) ; drawpoly( linecolor' 'x1' 'y2' 'circle' 'x2' 'y2 ) ; endif
@@ -422,7 +410,11 @@ function xcbar( args )
           xc = x1 + 0.5 * ( x2 - x1 )
           yc = y2 - 0.5 * ( x2 - x1 )
           radius = 0.5 * ( x2 - x1 )
-          'draw recf 'x1' 'y1' 'x2' 'yc
+          if( y1 < yc )
+            'draw recf 'x1' 'y1' 'x2' 'yc
+          else
+            yc = y1
+          endif
           circle = circle( xc, yc, radius, 0, 180, 6 )
           'draw polyf 'circle
           if( line = 'on' ) ; drawpoly( linecolor' 'x2' 'y1' 'circle' 'x1' 'y1 ) ; endif
@@ -433,17 +425,13 @@ function xcbar( args )
 
 
 * draw labels
-*  if( i != cnum & i-math_int(i/fstep)*fstep = foffset)
     if( i != cnum & i-foffset > 0 & math_int((i-1-foffset)/fstep)*fstep = i-1-foffset  )
-
       if( direction = 'horizontal' )
         'set string 'fcolor' tc 'fthickness' 0'
       else
        'set string 'fcolor' l 'fthickness' 0'
       endif
-
       'draw string 'xmoji' 'ymoji' 'hi.i
-
     endif
 
     i = i + 1
@@ -458,7 +446,7 @@ return
 * angle = 90 : y(+) direction
 *
 function circle( xc, yc, radius, amin, amax, astep )
-  circle=''
+  circle = ''
 
   angle = amin
   while( angle <= amax )
@@ -477,6 +465,7 @@ function drawrec( linecolor, xmin, ymin, xmax, ymax )
 return
 
 
+
 function drawpoly( args )
   linecolor = subwrd( args, 1 )
   xstart = subwrd( args, 2 )
@@ -489,7 +478,7 @@ function drawpoly( args )
   while( 1 = 1 )
     xmax = subwrd( args, i )
     ymax = subwrd( args, i+1 )
-    if( xmax = "" | ymax = "" ); break; endif
+    if( xmax = '' | ymax = '' ) ; break ; endif
 
     'set cthick 1'
     'set line 'linecolor
@@ -497,14 +486,12 @@ function drawpoly( args )
 
     xmin = xmax
     ymin = ymax
-
     i = i + 2
   endwhile
 
   'set cthick 1'
   'set line 'linecolor
   'draw line 'xmin' 'ymin' 'xstart' 'ystart
-
 return
 
 *
@@ -512,17 +499,18 @@ return
 *
 function help()
   say ' Name:'
-  say '   xcbar '_version' - Draw color bar at any position and size'
+  say '   xcbar '_version' - Draw color bar at any position and size.'
   say ' '
   say ' Usage:'
   say '   xcbar [ xmin xmax ymin ymax ]'
-  say '         [ ( -fwidth | -fw ) value ]'
-  say '         [ ( -fheight | -fh ) value ]'
-  say '         [ ( -fthickness | -ft ) value ]'
-  say '         [ ( -fstep | -fs ) value ]'
-  say '         [ ( -foffset | -fo ) ( value | center ) ]'
-  say '         [ ( -fcolor | -fc ) value ]'
-  say '         [ ( -fxoffset | -fx ) value ] [ ( -fyoffset | -fy ) value ]'
+  say '         [ ( -xoffset | -xo ) xoffset ] [ ( -yoffset | -yo ) yoffset ]'
+  say '         [ ( -fwidth | -fw ) fwidth ]'
+  say '         [ ( -fheight | -fh ) hfeight ]'
+  say '         [ ( -fthickness | -ft ) fthickness ]'
+  say '         [ ( -fskip | -fstep | -fs ) fskip ]'
+  say '         [ ( -foffset | -fo ) ( foffset | center ) ]'
+  say '         [ ( -fcolor | -fc ) fcolor ]'
+  say '         [ ( -fxoffset | -fx ) fxoffset ] [ ( -fyoffset | -fy ) fyoffset ]'
   say '         [ ( -direction | -dir ) ( horizontal | h | vertical | v ) ]'
   say '         [ -edge ( box | triangle | circle ) ]'
   say '         [ -line [ on | off ] ]'
@@ -535,32 +523,24 @@ function help()
   say '                  without xmin, xmax, ymin or ymax, '
   say '                  position will be determined automatically'
   say '                  following cbar.gs manner.'
+  say '     xoffset    : x-position offset (default=0)'
+  say '     yoffset    : y-position offset (default=0)'
   say '     fwidth     : font width (default=0.12)'
-  say '     fw         : same as fwidth'
   say '     fheight    : font height (default=0.13)'
-  say '     fh         : same as fheight'
   say '     fthickness : font thickness (default=fheight*40)'
-  say '     ft         : same as fthickness'
-  say '     fstep      : label step (default=1)'
-  say '     fs         : same as fstep'
+  say '     fskip      : label interval (default=1)'
   say '     foffset    : label offset for fstep (default=0)'
   say '                  to put labels at the center, specify "center".'
-  say '     fo         : same as foffset'
   say '     fcolor     : label color number (default=1)'
-  say '     fc         : same as fcolor'
   say '     fxoffset   : x-direction offset for a label (default=0)'
-  say '     fx         : same as fxoffset'
   say '     fyoffset   : y-direction offset for a label (default=0)'
-  say '     fy         : same as fyoffset'
-  say '     direction  : horizontal ("h" in short) or vertical ("v" in short)'
+  say '     -direction : horizontal ("h" in short) or vertical ("v" in short)'
   say '                  color bar (default=horizontal)'
-  say '     dir        : same as direction'
-  say '     edge       : shape of edge (default=box)'
-  say '     line       : lines between each color box.'
+  say '     -edge      : shape of edge (default=box)'
+  say '     -line      : lines between each color box.'
   say '                  line is off without -line'
   say '                  line is on just for -line'
-  say '     linecolor  : color of lines between each color box (default=1)'
-  say '     lc         : same as linecolor'
+  say '     -levcol    : color of lines between each color box (default=1)'
   say '     c(1) l(1) c(2) level(2) ... l(cnum-1) c(cnum)'
   say '                : color numbers and levels. By using this option,'
   say '                  you can draw color bar without drawing figure'
@@ -571,7 +551,7 @@ function help()
   say ''
   say '    xcbar is based on cbar.gs'
   say ''
-  say ' Copyright (C) 2011-2013 Chihiro Kodama'
+  say ' Copyright (C) 2011-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
