@@ -2,9 +2,8 @@
 * Help is in the end of this script.
 *
 function xopen( args )
-  rc = gsfallow('on')
-
-  _version='0.01b2'
+  rc = gsfallow( 'on' )
+  _version = '0.01b2'
 
   if( args = '' )
     help()
@@ -33,9 +32,6 @@ function xopen( args )
 *** open with sdfopen if appropriate ***
   if( ext2 = '.nc' )
     cmd = 'sdfopen'
-*    'sdfopen 'fname
-*    prompt result
-*    return
   endif
 
 *** open with open/xdfopen ***
@@ -67,10 +63,8 @@ function xopen( args )
 
     if( file_type = 'grd' )
       cmd = 'open'
-*    'open 'fname
     else
       cmd = 'xdfopen'
-*      'xdfopen 'fname
     endif
   endif
 
@@ -86,7 +80,7 @@ return
 *
 function help()
   say ' Name:'
-  say '   xopen '_version' - automatically choose appropriate open command (open/sdfopen/xdfopen)'
+  say '   xopen '_version' - Automatically choose appropriate open command (open/sdfopen/xdfopen)'
   say ' '
   say ' Usage:'
   say '   open [-t] file-name'
@@ -100,7 +94,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This function depends on chcase.gsf.'
   say ''
-  say ' Copyright (C) 2012 Chihiro Kodama'
+  say ' Copyright (C) 2012-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
