@@ -1,5 +1,5 @@
 function setlabs( args )
-  _version = '0.01b1'
+  _version = '0.01b2'
   rc = gsfallow("on")
 
  if( args = '' )
@@ -12,7 +12,6 @@ function setlabs( args )
   int  = 0
   mul = '1'
   add = '0'
-
   opmax = 0
 
 ***** Arguement *****
@@ -84,6 +83,7 @@ function setlabs( args )
     num = ( max - min ) / int
     if( valnum(num) != 1 )
       say 'error in setlabs.gs: number of labels must be an integer.'
+      say 'min=' % min % ', max=' % max % ', int=' % int % ', num=' % num
       return
     endif
   else
@@ -91,22 +91,16 @@ function setlabs( args )
     int = ( max - min ) / num
   endif
 
+  if( max < min )
+    num = -num
+    if( int > 0 ) ; int = -int ; endif
+  endif
+
   n = 0
   val = min
   while( n <= num )
     val_disp = val
     
-*    o = 1
-*    while( o <= opmax )
-*      if( op.o = '-mul' )
-*        val_disp = val_disp * (opval.o)
-*      endif
-*      if( op.o = '-add' )
-*        val_disp = val_disp + (opval.o)
-*      endif
-*      o = o + 1
-*    endwhile
-
     if( n = 0 )
       labs = val_disp
     else
@@ -117,8 +111,7 @@ function setlabs( args )
     val = val + int
   endwhile
 
-*  say labs
-  'set 'axis'abs 'labs
+  prex( 'set 'axis'abs 'labs )
 return
 
 
@@ -127,25 +120,24 @@ return
 *
 function help()
   say ' Name:'
-  say '   setlabs '_version' - set x/y labels'
+  say '   setlabs '_version' - Set x/y labels.'
   say ' '
   say ' Usage:'
   say '   setlabs ( xl | yl )'
-  say '           [ (-mul value1) | (-add value1) ]'
-  say '           [ (-mul value2) | (-add value2) ] ...'
+  say '           [ (-mul | -add) value1 [ (-mul | -add) value2 ... ]]'
   say '           [-int interval]'
   say ''
-  say '     ( xl | yl )      : xlabels or ylabels.'
-  say '     (-mul value1)    : label values are multiplied by value1.'
+  say '     ( xl | yl )      : Horizontal label or vertical label.'
+  say '     (-mul value1)    : Label values are multiplied by value1.'
   say '     (-add value1)    : label values are added by value1.'
-  say '         These are operated by the order appeared in the arguements.'
+  say '         Operations are performed by the order appeared in the -mul/-add options.'
   say '     -int interval    : interval of label values (after operator is applied).'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2012-2012 Chihiro Kodama'
+  say ' Copyright (C) 2012-2015 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
