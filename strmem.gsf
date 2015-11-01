@@ -3,11 +3,12 @@
 *
 * act = 'get' : get variable
 *
-* ' Copyright (C) 2010 Chihiro Kodama'
+* ' Copyright (C) 2010-2015 Chihiro Kodama'
 * ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
 *
 function strmem( act, name, str )
   _version = '0.01r1'
+  rc = gsfallow( 'on' )
 
 ********** BELOW PLEASE SET PATH FOR TEMPORARY BUFFER ************
   path = '/var/tmp'
@@ -111,33 +112,33 @@ return -1
 
 
 ***** char -> integer *****
-function atoi( char )
-
-* avoid bug in GrADS 1.9 or less ('e' and '+' are assumed to be same)
-  a='1'char'5'
-  if( a = 1e+5 )  ; return 101 ; endif
-  if( a = '1+5' ) ; return 43  ; endif
-
-if( char = a ) ; return 43 ; endif
-  if( char = 'e' ) ; return 101 ; endif
-  i = 32
-  while( i <= 126 )
-    if( itoa(i) = char ) ; return i ; endif
-    i = i + 1
-  endwhile
-return -1
+*function atoi( char )
+*
+** avoid bug in GrADS 1.9 or less ('e' and '+' are assumed to be same)
+*  a='1'char'5'
+*  if( a = 1e+5 )  ; return 101 ; endif
+*  if( a = '1+5' ) ; return 43  ; endif
+*
+*if( char = a ) ; return 43 ; endif
+*  if( char = 'e' ) ; return 101 ; endif
+*  i = 32
+*  while( i <= 126 )
+*    if( itoa(i) = char ) ; return i ; endif
+*    i = i + 1
+*  endwhile
+*return -1
 
 
 ***** integer -> char *****
-function itoa( int )
-* ascii character table
-  table = ' !"#$%&'
-  table = table % "'"
-  table = table % '()*+,-./0123456789:;<=>?@'
-  table = table % 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`'
-  table = table % 'abcdefghijklmnopqrstuvwxyz{|}~'
-
-  if( int >= 32 & int <= 126 )
-    return substr( table, int-31, 1 )
-  endif
-return -1
+*function itoa( int )
+** ascii character table
+*  table = ' !"#$%&'
+*  table = table % "'"
+*  table = table % '()*+,-./0123456789:;<=>?@'
+*  table = table % 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`'
+*  table = table % 'abcdefghijklmnopqrstuvwxyz{|}~'
+*
+*  if( int >= 32 & int <= 126 )
+*    return substr( table, int-31, 1 )
+*  endif
+*return -1
