@@ -1,4 +1,7 @@
 function rgnwrd( str, n_start, n_end, sep )
+
+*  If separator is space, just use subwrd() for output.
+*  if( sep = 'sep' | sep = '' | sep = ' ' )
   if( sep = 'sep' | sep = '' )
     n = n_start
     ret = ''
@@ -11,23 +14,26 @@ function rgnwrd( str, n_start, n_end, sep )
 
   else
     ret = ''
-    len = math_strlen( str )
+    len_sep = math_strlen( sep )
+    len     = math_strlen( str )
     p = 1
     i = 1
-    imin = 1
+    imin = -1
+    if( n_start = 1 ) ; imin = 1 ; endif
     imax = len
     while( i <= len )
-      c = substr( str, i, 1 )
+      c = substr( str, i, len_sep )
       if( c = sep )
         p = p + 1
-        if( p = n_start ) ; imin = i + 1 ; endif
-        if( p > n_end   ) ; imax = i - 1 ; break ; endif
+        if( p = n_start ) ; imin = i + len_sep ; endif
+        if( p > n_end   ) ; imax = i - len_sep ; break ; endif
+        i = i + len_sep
+      else
+        i = i + 1
       endif
-      i = i + 1
     endwhile
-
-    if( imin > imax ) ; ret = ''
+    if( imin = -1 | imin > imax ) ; ret = ''
     else ; ret = substr( str, imin, imax-imin+1 ) ; endif
-  endif
 
+  endif
 return ret
