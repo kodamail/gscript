@@ -179,15 +179,25 @@ function cmonth( month, size )
       now = month.1.sm
 
       cont = 1
-      ret = month.1.sm
+      if( size = 1 )
+        ret = math_fmod( month.1.sm, 10 )
+      else
+        ret = month.1.sm
+      endif
+
       m = 2
       while( m <= mmax )
-        now = math_fmod( now + 1 + 1, 12 ) - 1
+*        now = math_fmod( now + 1 + 1, 12 ) - 1
+        now = math_fmod( now, 12 ) + 1
         m2 = 1
         while( month.m.m2 != '' )
 
-          if( month.m.m2 = now  )
-            ret = ret % ',' % month.m.m2
+          if( month.m.m2 = now )
+            if( size = 1 )
+              ret = ret % math_fmod( month.m.m2, 10 )
+            else
+              ret = ret % ',' % month.m.m2
+            endif
             break
           endif
           m2 = m2 + 1
@@ -197,11 +207,12 @@ function cmonth( month, size )
         m = m + 1
       endwhile
 
+*say cont
       if( cont != 1 ) ; ret = -1 ; endif
       sm = sm + 1
     endwhile
-    if( ret != -1 ) ; return ret ; endif
 
+    if( ret != -1 ) ; return ret ; endif
 
   endif
 return ret
