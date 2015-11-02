@@ -133,43 +133,59 @@ function cmonth( month, size )
 
 *   convert
     m = 1
-    month.m = ''
-    length = math_strlen( month )
-    i = 1
-    while( i <= length )
-      c = substr( month, i, 1 )
-      if( c = '-' )
-        m = m + 1
-        month.m = ''
-      else
-        month.m = month.m % c
-      endif
-      i = i + 1
-    endwhile
-    mmax = m
-    m = 1
 
+*    month.m = ''
+*    length = math_strlen( month )
+*    i = 1
+*    while( i <= length )
+*      c = substr( month, i, 1 )
+*      if( c = '-' )
+*        m = m + 1
+*        month.m = ''
+*      else
+*        month.m = month.m % c
+*      endif
+*      i = i + 1
+*    endwhile
+*    mmax = m
+
+    while( 1 = 1 )
+      month.m  = rgnwrd( month, m, m, '-' )
+      if( month.m = '' ) ; break ; endif
+      m = m + 1
+    endwhile
+    mmax = m - 1
+
+
+    m = 1
     while( m <= mmax )
       month.m = chcase( month.m, 'upper_first' )
       month.m = cmonth( month.m )
 
 *    m2: for multiple-candidate
-      length = math_strlen( month.m )
+*      length = math_strlen( month.m )
+*      i = 1
+*      m2 = 1
+*      month.m.m2 = ''
+*      while( i <= length )
+*        c = substr( month.m, i, 1 )
+*        if( c = '|' )
+*          m2 = m2 + 1
+*          month.m.m2 = ''
+*        else
+*          month.m.m2 = month.m.m2 % c
+*        endif
+*        i = i + 1
+*      endwhile
       i = 1
-      m2 = 1
-      month.m.m2 = ''
-      while( i <= length )
-        c = substr( month.m, i, 1 )
-        if( c = '|' )
-          m2 = m2 + 1
-          month.m.m2 = ''
-        else
-          month.m.m2 = month.m.m2 % c
-        endif
+*      month.m.i = ''
+      while( 1 = 1 )
+        month.m.i = rgnwrd( month.m, i, i, '|' )
+        if( month.m.i = '' ) ; break ; endif
         i = i + 1
       endwhile
-      m2 = m2 + 1
-      month.m.m2 = ''
+*      m2 = m2 + 1
+*      month.m.m2 = ''
       m = m + 1
     endwhile
 
