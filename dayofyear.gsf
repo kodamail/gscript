@@ -2,6 +2,7 @@ function dayofyear( time )
   length = math_strlen( time )
   year   = substr( time, length-3, 4 )
   cmonth = substr( time, length-6, 3 )
+  cmonth = chcase( cmonth, 'upper' )
   day = substr( time, length-8, 2 )
 
   if( cmonth = 'JAN' ) ; month = 1  ; endif
