@@ -1,0 +1,17 @@
+function lon2x( lon )
+  'q dims'
+  line = sublin( result, 2 )
+  type = subwrd( line, 3 )
+  if( type = 'varying' )
+    x1 = subwrd( line, 11 )
+    x2 = subwrd( line, 13 )
+  else
+    x1 = subwrd( line, 9 )
+    x2 = subwrd( line, 9 )
+  endif
+  'set lon 'lon
+  'q dims'
+  line = sublin( result, 2 )
+  x    = subwrd( line, 9 )
+  'set x 'x1' 'x2
+return x
