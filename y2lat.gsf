@@ -1,0 +1,17 @@
+function y2lat( y )
+  'q dims'
+  line = sublin( result, 3 )
+  type = subwrd( line, 3 )
+  if( type = 'varying' )
+    y1 = subwrd( line, 11 )
+    y2 = subwrd( line, 13 )
+  else
+    y1 = subwrd( line, 9 )
+    y2 = subwrd( line, 9 )
+  endif
+  'set y 'y
+  'q dims'
+  line = sublin( result, 3 )
+  lat  = subwrd( line, 6 )
+  'set y 'y1' 'y2
+return lat
