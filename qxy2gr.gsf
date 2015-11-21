@@ -1,0 +1,13 @@
+function qxy2gr( x, y )
+  rc = gsfallow( 'on' )
+  check = qgxinfo( 'last' )
+  if( check = 'Clear' )
+    say 'error in qxy2gr.gsf: no graphics are drawn until now'
+    return ''
+  endif
+  'q xy2gr 'x' 'y
+  gx = subwrd( result, 3 )
+  gy = subwrd( result, 6 )
+  ret = gx % ' ' % gy
+  return ret
+end function
