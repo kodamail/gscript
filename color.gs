@@ -11,7 +11,8 @@ function color( args )
   endif
 
 ***** Default value *****
-  gxout  = ''
+*  gxout  = ''
+  gxout  = 'shaded'
   kind   = 'blue->white->red'
   alpha  = 255
   sample = 0
@@ -235,14 +236,14 @@ function color( args )
   endwhile
 
 *** get gxout if necessary, or set gxout
-  if( gxout = '' )
-    gxout = qgxout( '2d-1expr' )
-    gxout = chcase( gxout, 'lower' )
-*   This seems to be a GrADS's bug when mproj = nps.
-    if( gxout = '16' ) ; gxout = 'shaded' ; endif
-  else
+*  if( gxout = '' )
+*    gxout = qgxout( '2d-1expr' )
+*    gxout = chcase( gxout, 'lower' )
+**   This seems to be a GrADS's bug when mproj = nps.
+*    if( gxout = '16' ) ; gxout = 'shaded' ; endif
+*  else
     'set gxout 'gxout
-  endif
+*  endif
 
 **** one more color if gxout=shaded etc.
   if( gxout = 'grfill' | gxout = 'shaded' | gxout = 'shaded1' | gxout = 'shaded2' | gxout = 'shaded2b' )
