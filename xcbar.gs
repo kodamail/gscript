@@ -59,7 +59,7 @@ function xcbar( args )
         i = i + 1
         break
       endif
-      if( arg = '-fskip' | aarg = '-fstep' | arg = '-fs' )
+      if( arg = '-fskip' | arg = '-fstep' | arg = '-fs' )
         fstep = subwrd( args, i )
         i = i + 1
         break
