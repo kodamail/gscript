@@ -403,10 +403,11 @@ function spcol( kind )
     if( c%c2 = '->' | c%c2 = '-(' | c = '>' | c = '(' | c = ')' | i = length )
       if( i = length ) ; coltemp = coltemp % c ; c = '' ; endif
 
-      if( coltemp = 'bluered' ) ; coltemp = 'blue->white->red' ; endif
-      if( coltemp = 'rainbow' ) ; coltemp = 'blue->aqua->lime->yellow->red' ; endif
-      if( coltemp = 'redblue' ) ; coltemp = 'red->white->blue' ; endif
-      if( coltemp = 'grainbow') ; coltemp = '(160,0,200)->(110,0,220)->(30,60,255)->(0,160,255)->(0,200,200)->(0,210,140)->(0,220,0)->(160,230,50)->(230,220,50)->(230,175,45)->(240,130,40)->(250,60,60)->(240,0,130)' ; endif
+      if( coltemp = 'bluered'     ) ; coltemp = 'blue->white->red' ; endif
+      if( coltemp = 'rainbow'     ) ; coltemp = 'blue->aqua->lime->yellow->red' ; endif
+      if( coltemp = 'redblue'     ) ; coltemp = 'red->white->blue' ; endif
+      if( coltemp = 'grainbow'    ) ; coltemp = '(160,0,200)->(110,0,220)->(30,60,255)->(0,160,255)->(0,200,200)->(0,210,140)->(0,220,0)->(160,230,50)->(230,220,50)->(230,175,45)->(240,130,40)->(250,60,60)->(240,0,130)' ; endif
+      if( coltemp = 'revgrainbow' ) ; coltemp = '(240,0,130)->(250,60,60)->(240,130,40)->(230,175,45)->(230,220,50)->(160,230,50)->(0,220,0)->(0,210,140)->(0,200,200)->(0,160,255)->(30,60,255)->(110,0,220)->(160,0,200)' ; endif
 
       kind2 = kind2 % coltemp % c
       coltemp = ''
