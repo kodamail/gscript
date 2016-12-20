@@ -2,9 +2,8 @@
 * Help is in the end of this script
 *
 function drawmark( args )
-
-  _version='0.01b1'
-
+  _version='0.01r1'
+  rc = gsfallow( 'on' )
   if( args = '' )
     help()
     return
@@ -16,6 +15,7 @@ function drawmark( args )
   ypos  = 'none'
   size  = 'none'
   angle = 0
+  by = 'xy'
 
 
 ***** Arguement *****
@@ -28,6 +28,7 @@ function drawmark( args )
     while( 1 )
 *** option
       if( arg = '-angle' ) ; angle=subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-by'    ) ; by=subwrd(args,i)    ; i=i+1 ; break ; endif
 
 *** name, xpos, ypos, size
       if( name = 'none' )
@@ -53,6 +54,12 @@ function drawmark( args )
   endwhile
 
   if( size = 'none' ) ; size = 1 ; endif
+
+  if( by = 'world' ) ; xypos = qw2xy(  xpos, ypos ) ; endif
+  if( by = 'grid'  ) ; xypos = qgr2xy( xpos, ypos ) ; endif
+  if( by = 'xy'    ) ; xypos = xpos % ' ' % ypos ; endif
+  xpos = subwrd( xypos, 1 )
+  ypos = subwrd( xypos, 2 )
 
 * virtual coordinate: [-0.5,-0,5]-[0.5:0.5]
   if( name = 'triangle' )
