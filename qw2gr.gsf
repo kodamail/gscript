@@ -1,13 +1,12 @@
 function qw2gr( wx, wy )
   rc = gsfallow( 'on' )
-  check = qgxinfo( 'last' )
-  if( check = 'Clear' )
-    say 'error in qw2gr.gsf: no graphics are drawn until now'
-    return ''
-  endif
   'q w2gr 'wx' 'wy
   gx = subwrd( result, 3 )
   gy = subwrd( result, 6 )
+  if( valnum(gx) = 0 | valnum(gy) = 0 )
+    say 'error in qw2gr.gsf: fail to get (gx,gy) from (wx,wy)'
+    return ''
+  endif
   ret = gx % ' ' % gy
   return ret
 end function
