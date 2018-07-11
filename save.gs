@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function save( args )
-  _version = '0.03r1'
+  _version = '0.04b1'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -10,18 +10,104 @@ function save( args )
     return
   endif
 
-*** arguements ***
-  fhead = subwrd( args, 1 )
+***** Default value *****
+  fhead      = ''
+  background = 'white'
+  density    = 'low'
+  size       = 'normal'
 
-  if( gradsver( 'v2.1.a1' ) = 1 )
-    'gxprint 'fhead'.eps white'
+***** Arguements *****
+  i = 1
+  while( 1 )
+    arg = subwrd( args, i )
+    i = i + 1;
+    if( arg = '' ); break; endif
+    while( 1 )
+*** option
+      if( arg = '-background' )  ; background = subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-density'    )  ; density    = subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-size'       )  ; size       = subwrd(args,i) ; i=i+1 ; break ; endif
 
-  else
-    'enable print 'fhead'.gmf'
-    'print'
-    'disable'
-    '!gxeps -c -i 'fhead'.gmf -o 'fhead'.eps'
-    '!rm -f 'fhead'.gmf'
+*** fhead
+      if( fhead = '' ) ; fhead = arg ; break ; endif
+      say 'syntax error: 'arg
+      return
+    endwhile
+  endwhile
+
+  if( background != 'white' & background != 'black' )
+    say 'error: background = ' % background % ' is not supported'
+    exit
+  endif
+
+* quality of rendering
+  if( density = 'low'    ) ; density =  150 ; endif
+  if( density = 'normal' ) ; density =  300 ; endif
+  if( density = 'high'   ) ; density =  600 ; endif
+  if( density = 'print'  ) ; density = 1200 ; endif
+
+  if( size = 'small'  ) ; size = '400x400'   ; endif
+  if( size = 'normal' ) ; size = '800x800'   ; endif
+  if( size = 'large'  ) ; size = '1600x1600' ; endif
+  if( size = 'huge'   ) ; size = '3200x3200' ; endif
+
+***** *****
+  len = math_strlen( fhead )
+  ext = substr( fhead, len-3, 4 )
+
+  fname = ''
+  if( ext = '.png' )
+    fname = fhead
+    fhead = substr( fhead, 1, len-4 )
+  endif
+  if( ext = '.eps' )
+    fhead = substr( fhead, 1, len-4 )
+    fname = fhead % '.eps'
+  endif
+  if( fname = '' )
+    ext = '.eps'
+    fname = fhead % '.eps'
+  endif
+
+
+***** png *****
+  if( ext = '.png' )
+
+*   This version (v2.1.0) seems to have a bug in printim.
+*    if( gradsver( 'v2.1.0' ) = 0 )
+      eps   = fhead % '_tmp.eps'
+      temp1 = fhead % '_tmp1.png'
+      temp2 = fhead % '_tmp2.png'
+      'save 'fhead'_tmp -background 'background
+      '!convert -rotate 90 +antialias -depth 8 -define png:bit-depth=8 -density 'density' -resize 'size' 'eps' 'temp1
+      '!convert -fill 'background' -draw "rectangle 0,0,10000,10000" 'temp1' 'temp2
+      '!composite 'temp1' 'temp2' 'fname
+      '!rm 'eps' 'temp1' 'temp2
+
+*    else
+
+*      'printim 'fname' 'background
+
+*    endif
+  endif
+
+***** eps *****
+  if( ext = '.eps' )
+
+    if( gradsver( 'v2.1.a1' ) = 1 )
+      'gxprint 'fhead'.eps 'background
+
+    else
+      'enable print 'fhead'.gmf'
+      'print'
+      'disable'
+      opt = ''
+      if( background = 'black' )
+        opt = '-r'
+      endif
+      '!gxeps -c 'opt' -i 'fhead'.gmf -o 'fhead'.eps'
+      '!rm -f 'fhead'.gmf'
+    endif
   endif
 
 return
@@ -31,20 +117,30 @@ return
 *
 function help()
   say ' Name:'
-  say '   save '_version' - Save image as eps format.'
+  say '   save '_version' - Save image as eps/png format.'
   say ' '
-  say ' Usage:'
+  say ' Usage(1):'
   say '   save file-head'
   say ''
-  say '     file-head : filename before'
+  say '     file-head : filename before .eps'
   say '       (ex. file-head=test -> save as test.eps)'
+  say ''
+  say ' Usage(2):'
+  say '   save filename [-background ("white"|"black")]'
+  say '                 [-density ("low"|"normal"|"high"|density)]'
+  say '                 [-size ("small"|"normal"|"large"|size)]'
+  say ''
+  say '     filename   : Filename ending with .eps or .png'
+  say '     background : Background color. Default="white"'
+  say '     density    : Quality of rendering from eps to png. Default="low"'
+  say '     size       : Size of png. Default="normal"'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
-  say '   This function uses gxeps command.'
+  say '   This function uses ImageMagick and gxeps commands.'
   say ''
-  say ' Copyright (C) 2009-2015 Chihiro Kodama'
+  say ' Copyright (C) 2009-2018 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
