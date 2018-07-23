@@ -1,0 +1,25 @@
+* return ratio of availability
+* ret=0: totally not available
+* ret=1: totally available
+function time_avail( time_start, time_end )
+  ret = 0
+  t_start = time2t( time_start )
+  t_end   = time2t( time_end   )
+
+  f = qdims( 'fnum' )
+  tdef = qctlinfo( f, 'tdef', 1 )
+
+  if( 1 <= t_start )
+    tmin = t_start
+  else
+    tmin = 1
+  endif
+
+  if( tdef >= t_end )
+    tmax = t_end
+  else
+    tmax = tdef
+  endif
+
+  ret = ( tmax - tmin + 1 ) / ( t_end - t_start + 1 )
+return ret
