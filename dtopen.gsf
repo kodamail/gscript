@@ -1,0 +1,30 @@
+* cmd: open command (if necessary)
+function dtopen( dir, tail, cmd, error )
+  ret = read( dir'/'tail  )
+  stat = sublin( ret, 1 )
+  if( stat = 0 )
+    fv_pre = last()
+
+    if( cmd = 'cmd' | cmd = '' )
+      'xopen 'dir'/'tail
+    else
+      cmd' 'dir'/'tail
+    endif
+    fv = last()
+    if( fv = fv_pre )
+      fv = -1
+    else
+      say 'open #' % fv % ': ' % dir % '/' % tail
+    endif
+  else
+    fv = -1
+  endif
+
+  if( error != 0 & fv < 0 )
+    say 'error: fail to open ' % dir % '/' % tail
+    exit
+  endif
+  if( fv < 0 )
+    say 'info: fail to open ' % dir % '/' % tail
+  endif
+return fv
