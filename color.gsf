@@ -246,7 +246,7 @@ function color( args )
 *  endif
 
 **** one more color if gxout=shaded etc.
-  if( gxout = 'grfill' | gxout = 'shaded' | gxout = 'shaded1' | gxout = 'shaded2' | gxout = 'shaded2b' )
+  if( gxout = 'grfill' | gxout = 'shaded' | gxout = 'shade1' | gxout = 'shade2' | gxout = 'shade2b' )
     colnum = colnum + 1
     cols = cols % ' ' % (colnum+15)
   endif
