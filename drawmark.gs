@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function drawmark( args )
-  _version='0.01r1'
+  _version='0.02r1'
   rc = gsfallow( 'on' )
   if( args = '' )
     help()
@@ -16,6 +16,11 @@ function drawmark( args )
   size  = 'none'
   angle = 0
   by = 'xy'
+  fill = 0
+  r = -1
+  g = -1
+  b = -1
+  a = -1
 
 
 ***** Arguement *****
@@ -29,6 +34,20 @@ function drawmark( args )
 *** option
       if( arg = '-angle' ) ; angle=subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-by'    ) ; by=subwrd(args,i)    ; i=i+1 ; break ; endif
+      if( arg = '-f' )     ; fill   = 1                ; break ; endif
+      if( arg = '-rgb' ) 
+        r = subwrd(args,i)
+        g = subwrd(args,i+1)
+        b = subwrd(args,i+2)
+        i=i+3 ; break
+      endif
+      if( arg = '-rgba' ) 
+        r = subwrd(args,i)
+        g = subwrd(args,i+1)
+        b = subwrd(args,i+2)
+        a = subwrd(args,i+3)
+        i=i+4 ; break
+      endif
 
 *** name, xpos, ypos, size
       if( name = 'none' )
@@ -107,6 +126,10 @@ function drawmark( args )
     str = str % x.i+xpos % ' ' % y.i+ypos % ' '
     i = i + 1
   endwhile
+  if( fill = 1 ) ; str = str % ' -f' ; endif
+  str = str % ' -rgba 'r' 'g' 'b' 'a
+say str
+
   'drawpoly 'str
 
 return
