@@ -44,7 +44,7 @@ function drawpoly( args )
         r = subwrd(args,i)
         g = subwrd(args,i+1)
         b = subwrd(args,i+2)
-        b = subwrd(args,i+3)
+        a = subwrd(args,i+3)
         i=i+4 ; break
       endif
 
