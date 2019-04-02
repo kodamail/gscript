@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function drawpoly( args )
-  _version = '0.02r1'
+  _version = '0.02r2'
   rc = gsfallow( 'on' )
   if( args = '' )
     help()
@@ -13,13 +13,14 @@ function drawpoly( args )
 
 ***** Default value
 * closed: for drawline.gs
-  closed = 1
-  by     = 'xy'
-  fill = 0
-  r = -1
-  g = -1
-  b = -1
-  a = -1
+  closed  = 1
+  by      = 'xy'
+  fill    = 0
+  r       = -1
+  g       = -1
+  b       = -1
+  a       = -1
+  setline = ''
 
 ***** Arguement *****
   i = 1
@@ -47,7 +48,14 @@ function drawpoly( args )
         a = subwrd(args,i+3)
         i=i+4 ; break
       endif
-
+      if( arg = '-setline' ) 
+        setline = subwrd(args,i) ; i=i+1
+        tmp = subwrd(args,i)
+        if( valnum(tmp) != 0 ) ; setline = setline % ' ' % tmp ; i=i+1 ; endif
+        tmp = subwrd(args,i)
+        if( valnum(tmp) != 0 ) ; setline = setline % ' ' % tmp ; i=i+1 ; endif
+        break
+      endif
       if( valnum(arg) != 0 )
         x.p = arg
         y.p = subwrd(args,i)
@@ -63,11 +71,12 @@ function drawpoly( args )
   endwhile
   pmax = p - 1
 
+  if( setline != '' ) ; 'set line 'setline ; endif
+
   if( r != -1 & g != -1 & g != -1 )
     if( a != -1 ) ; 'set rgb 99 'r' 'g' 'b' 'a
     else ; 'set rgb 99 'r' 'g' 'b
     endif
-
     'set line 99'
   endif
 
@@ -111,6 +120,7 @@ function help()
   say '            [ -f ]'
   say '            [ -rgb  r g b ]'
   say '            [ -rgba r g b a ]'
+  say '            [ -setline setline-options ]'
   say '            [ -by ( world | grid | xy ) ] x1 y1 x2 y2 ...'
   say ' '
   say ''
@@ -119,6 +129,8 @@ function help()
   say '     -f   : filled'
   say ''
   say '     -rgb | -rgba : rgb or rgba values in [0-255]'
+  say ''
+  say '     -setline : options same as "set line"'
   say ''
   say '     -by : unit of p1, q1, p2, q2'
   say '         world : world coordinate (e.g. lat)'

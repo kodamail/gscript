@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function drawmark( args )
-  _version='0.02r1'
+  _version='0.02r2'
   rc = gsfallow( 'on' )
   if( args = '' )
     help()
@@ -47,6 +47,14 @@ function drawmark( args )
         b = subwrd(args,i+2)
         a = subwrd(args,i+3)
         i=i+4 ; break
+      endif
+      if( arg = '-setline' ) 
+        setline = subwrd(args,i) ; i=i+1
+        tmp = subwrd(args,i)
+        if( valnum(tmp) != 0 ) ; setline = setline % ' ' % tmp ; i=i+1 ; endif
+        tmp = subwrd(args,i)
+        if( valnum(tmp) != 0 ) ; setline = setline % ' ' % tmp ; i=i+1 ; endif
+        break
       endif
 
 *** name, xpos, ypos, size
@@ -128,7 +136,8 @@ function drawmark( args )
   endwhile
   if( fill = 1 ) ; str = str % ' -f' ; endif
   str = str % ' -rgba 'r' 'g' 'b' 'a
-say str
+
+  if( setline != '' ) ; str = str % ' -setline ' % setline ; endif
 
   'drawpoly 'str
 
@@ -143,8 +152,16 @@ function help()
   say ' '
   say ' Usage:'
   say '   drawmark mark-name x y [size] [-angle angle]'
-  say ' '
+  say '            [ -rgb  r g b ]'
+  say '            [ -rgba r g b a ]'
+  say '            [ -setline setline-options ]'
+  say '            [ -by ( world | grid | xy ) ] x y'
+  say ''
   say '     x, y : positions'
+  say ''
+  say '     -rgb | -rgba : rgb or rgba values in [0-255]'
+  say ''
+  say '     -setline : options same as "set line"'
   say ''
   say '     -by : unit of p1, q1, p2, q2'
   say '         world : world coordinate (e.g. lat)'
