@@ -56,6 +56,7 @@ function drawpoly( args )
         if( valnum(tmp) != 0 ) ; setline = setline % ' ' % tmp ; i=i+1 ; endif
         break
       endif
+      if( arg = '-a' ) ; a=subwrd(args,i) ; i=i+1 ; break ; endif
       if( valnum(arg) != 0 )
         x.p = arg
         y.p = subwrd(args,i)
@@ -71,7 +72,32 @@ function drawpoly( args )
   endwhile
   pmax = p - 1
 
-  if( setline != '' ) ; 'set line 'setline ; endif
+* color table from http://cola.gmu.edu/grads/gadoc/colorcontrol.html
+  r.0  =   0 ; g.0  =   0 ; b.0  =   0
+  r.1  = 255 ; g.1  = 255 ; b.1  = 255
+  r.2  = 250 ; g.2  =  60 ; b.2  =  60
+  r.3  =   0 ; g.3  = 220 ; b.3  =   0
+  r.4  =  30 ; g.4  =  60 ; b.4  = 255  
+  r.5  =   0 ; g.5  = 200 ; b.5  = 200
+  r.6  = 240 ; g.6  =   0 ; b.6  = 130
+  r.7  = 230 ; g.7  = 220 ; b.7  =  50
+  r.8  = 240 ; g.8  = 130 ; b.8  =  40
+  r.9  = 160 ; g.9  =   0 ; b.9  = 200
+  r.10 = 160 ; g.10 = 230 ; b.10 =  50
+  r.11 =   0 ; g.11 = 160 ; b.11 = 255
+  r.12 = 230 ; g.12 = 175 ; b.12 =  45
+  r.13 =   0 ; g.13 = 210 ; b.13 = 140
+  r.14 = 130 ; g.14 =   0 ; b.14 = 220
+  r.15 = 170 ; g.15 = 170 ; b.15 = 170
+
+  if( setline != '' )
+    'set line 'setline
+    if( a != -1 )
+      c = subwrd( setline, 1 )
+      'set rgb 99 'r.c' 'g.c' 'b.c' 'a
+      'set line 99'
+    endif
+  endif
 
   if( r != -1 & g != -1 & g != -1 )
     if( a != -1 ) ; 'set rgb 99 'r' 'g' 'b' 'a

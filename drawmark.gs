@@ -10,17 +10,18 @@ function drawmark( args )
   endif
 
 ***** Default value
-  name  = 'none'
-  xpos  = 'none'
-  ypos  = 'none'
-  size  = 'none'
-  angle = 0
-  by = 'xy'
-  fill = 0
-  r = -1
-  g = -1
-  b = -1
-  a = -1
+  name    = 'none'
+  xpos    = 'none'
+  ypos    = 'none'
+  size    = 'none'
+  angle   = 0
+  by      = 'xy'
+  fill    = 0
+  r       = -1
+  g       = -1
+  b       = -1
+  a       = -1
+  setline = ''
 
 
 ***** Arguement *****
@@ -56,6 +57,7 @@ function drawmark( args )
         if( valnum(tmp) != 0 ) ; setline = setline % ' ' % tmp ; i=i+1 ; endif
         break
       endif
+      if( arg = '-a' ) ; a=subwrd(args,i) ; i=i+1 ; break ; endif
 
 *** name, xpos, ypos, size
       if( name = 'none' )
@@ -136,7 +138,6 @@ function drawmark( args )
   endwhile
   if( fill = 1 ) ; str = str % ' -f' ; endif
   str = str % ' -rgba 'r' 'g' 'b' 'a
-
   if( setline != '' ) ; str = str % ' -setline ' % setline ; endif
 
   'drawpoly 'str
