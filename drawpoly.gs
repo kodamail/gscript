@@ -116,9 +116,9 @@ function help()
   say ''
   say '     -o | open : open polygon (for drawline.gs)'
   say ''
-  say '     -f   : filled
+  say '     -f   : filled'
   say ''
-  say '     -rgb | -rgba : rgb or rgba values in [0-255]
+  say '     -rgb | -rgba : rgb or rgba values in [0-255]'
   say ''
   say '     -by : unit of p1, q1, p2, q2'
   say '         world : world coordinate (e.g. lat)'

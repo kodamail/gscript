@@ -155,7 +155,7 @@ function help()
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2016 Chihiro Kodama'
+  say ' Copyright (C) 2016-2019 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
