@@ -2,7 +2,8 @@
 * Help is in the end of this script
 *
 function draws(args)
-  _version='0.04r1'
+  _version='0.05r1'
+  rc = gsfallow( 'on' )
 
   if( args = '' )
     help()
@@ -17,6 +18,9 @@ function draws(args)
   color   = 1
   setfont = ''
   angle   = ''
+  by      = 'figure'
+  x       = -1
+  y       = -1
 
 ***** Arguement *****
   i=1
@@ -35,6 +39,15 @@ function draws(args)
       if( arg = '-setfont' ) ; setfont = subwrd(args,i); i=i+1; break; endif
       if( arg = '-xoffset' | arg = '-xo' ) ; xoffset = subwrd(args,i); i=i+1; break; endif
       if( arg = '-yoffset' | arg = '-yo' ) ; yoffset = subwrd(args,i); i=i+1; break; endif
+      if( arg = '-by'      )
+        by = subwrd(args,i)
+        i=i+1
+        if( by = 'xy' | by = 'grid' | by = 'world' )
+          x = subwrd(args,i) ; i=i+1
+          y = subwrd(args,i) ; i=i+1
+        endif
+        break
+      endif
 
       flag = 1
       i = i - 1
@@ -72,63 +85,100 @@ function draws(args)
 
   str = substr(args, start, end-start+1)
 
+****************************************
+* case 1: relative to figure
+****************************************
+  if( by = 'figure' )
 
 ***** Parameter adjust *****
-  if( base = 'none' )
-    if( pos = 'tc' ); base = 'bc'; endif
-    if( pos = 'bc' ); base = 'tc'; endif
-    if( pos = 'tl' ); base = 'bl'; endif
-    if( pos = 'bl' ); base = 'tl'; endif
-    if( pos = 'tr' ); base = 'br'; endif
-    if( pos = 'br' ); base = 'tr'; endif
-    if( pos = 'l' );  base = 'r'; endif
-    if( pos = 'r' );  base = 'l'; endif
-  endif
-
-
+    if( base = 'none' )
+      if( pos = 'tc' ); base = 'bc'; endif
+      if( pos = 'bc' ); base = 'tc'; endif
+      if( pos = 'tl' ); base = 'bl'; endif
+      if( pos = 'bl' ); base = 'tl'; endif
+      if( pos = 'tr' ); base = 'br'; endif
+      if( pos = 'br' ); base = 'tr'; endif
+      if( pos = 'l' );  base = 'r'; endif
+      if( pos = 'r' );  base = 'l'; endif
+    endif
 ***** TODO: Parameter check *****
 
-
 ***** Get gxinfo *****
-  'q gxinfo'
-  temp = sublin(result, 3)
-  xmin = subwrd(temp, 4)
-  xmax = subwrd(temp, 6)
-  temp = sublin(result, 4)
-  ymin = subwrd(temp, 4)
-  ymax = subwrd(temp, 6)
+*    'q gxinfo'
+*    temp = sublin(result, 3)
+*    xmin = subwrd(temp, 4)
+*    xmax = subwrd(temp, 6)
+*    temp = sublin(result, 4)
+*    ymin = subwrd(temp, 4)
+*    ymax = subwrd(temp, 6)
+    xmin = qgxinfo( 'xmin' )
+    xmax = qgxinfo( 'xmax' )
+    ymin = qgxinfo( 'ymin' )
+    ymax = qgxinfo( 'ymax' )
 
-  if( pos = 'tc' )
-    x = xmin + 0.5 * (xmax - xmin) + xoffset
-    y = ymax + 0.1 + yoffset
+    if( pos = 'tc' )
+      x = xmin + 0.5 * (xmax - xmin) + xoffset
+      y = ymax + 0.1 + yoffset
+    endif
+    if( pos = 'bc' )
+      x = xmin + 0.5 * (xmax - xmin) + xoffset
+      y = ymin - 0.1 + yoffset
+    endif
+    if( pos = 'tl' )
+      x = xmin + xoffset
+      y = ymax + 0.1 + yoffset
+    endif
+    if( pos = 'bl' )
+      x = xmin + xoffset
+      y = ymin - 0.1 + yoffset
+    endif
+    if( pos = 'tr' )
+      x = xmax + xoffset
+      y = ymax + 0.1 + yoffset
+    endif
+    if( pos = 'br' )
+      x = xmax + xoffset
+      y = ymin - 0.1 + yoffset
+    endif
+    if( pos = 'l' )
+      x = xmin - 0.1 + xoffset
+      y = ymin + 0.5 * ( ymax - ymin ) + yoffset
+    endif
+    if( pos = 'r' )
+      x = xmax + 0.1 + xoffset
+      y = ymin + 0.5 * ( ymax - ymin ) + yoffset
+    endif
   endif
-  if( pos = 'bc' )
-    x = xmin + 0.5 * (xmax - xmin) + xoffset
-    y = ymin - 0.1 + yoffset
+
+****************************************
+  if( by != 'figure' )
+    if( base = 'none' ) ; base = '' ; endif
   endif
-  if( pos = 'tl' )
-    x = xmin + xoffset
-    y = ymax + 0.1 + yoffset
+
+****************************************
+* case 2: xy
+****************************************
+  if( by = 'xy' )
+    x = x + xoffset
+    y = y + yoffset
   endif
-  if( pos = 'bl' )
-    x = xmin + xoffset
-    y = ymin - 0.1 + yoffset
+
+****************************************
+* case 3: world
+****************************************
+  if( by = 'world' )
+    xy = qw2xy( x, y )
+    x = subwrd( xy, 1 ) + xoffset
+    y = subwrd( xy, 2 ) + yoffset
   endif
-  if( pos = 'tr' )
-    x = xmax + xoffset
-    y = ymax + 0.1 + yoffset
-  endif
-  if( pos = 'br' )
-    x = xmax + xoffset
-    y = ymin - 0.1 + yoffset
-  endif
-  if( pos = 'l' )
-    x = xmin - 0.1 + xoffset
-    y = ymin + 0.5 * ( ymax - ymin ) + yoffset
-  endif
-  if( pos = 'r' )
-    x = xmax + 0.1 + xoffset
-    y = ymin + 0.5 * ( ymax - ymin ) + yoffset
+
+****************************************
+* case 4: grid
+****************************************
+  if( by = 'grid' )
+    xy = qgr2xy( x, y )
+    x = subwrd( xy, 1 ) + xoffset
+    y = subwrd( xy, 2 ) + yoffset
   endif
 
 ***** draw *****
@@ -157,11 +207,17 @@ function help()
   say ' '
   say ' Usage:'
   say '   draws'
-  say '     [-pos position] [-base base]'
+  say '     ([-by figure] [-pos position] [-base base]'
+  say '     | -by (world | grid | xy) xpos ypos)'
   say '     [(-xoffset | -xo) xoffset] [(-yoffset | -yo) yoffset]'
   say '     [-color color] [-setfont size] [-angle angle]'
   say '     string'
   say ' '
+  say '     -by : Coordinate type'
+  say '         figure : relative to figure (default)'
+  say '         world  : world coordinate (e.g. lat)'
+  say '         grid   : grid coordinate (grid number)'
+  say '         xy     : same as "draw line"'
   say '     position    : Position to draw string. Default value is "tc".'
   say '                   tc: top center,  bc: buttom center,'
   say '                   tl: top left,    bl: buttom left,'
@@ -169,6 +225,7 @@ function help()
   say '                    l:left,          r: right'
   say '     base        : Base position of the string.'
   say '                   How to specify is same as position.'
+  say '     xpos, ypos  : positions'
   say '     xoffset     : Horizontal offset. Default value is 0.'
   say '     yoffset     : Vertical offset. Default value is 0.'
   say '     color       : Font color. Default value is 1.'
@@ -180,7 +237,7 @@ function help()
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2009-2015 Chihiro Kodama'
+  say ' Copyright (C) 2009-2019 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
