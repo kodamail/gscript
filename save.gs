@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function save( args )
-  _version = '0.04b1'
+  _version = '0.04r1'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -27,6 +27,11 @@ function save( args )
       if( arg = '-background' )  ; background = subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-density'    )  ; density    = subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-size'       )  ; size       = subwrd(args,i) ; i=i+1 ; break ; endif
+
+      if( arg = '-hh'               )  ; size = 'huge'   ; density = 'high'   ; break ; endif
+      if( arg = '-lh' | arg = '-hl' )  ; size = 'large'  ; density = 'high'   ; break ; endif
+      if( arg = '-nh' | arg = '-hn' )  ; size = 'normal' ; density = 'high'   ; break ; endif
+      if( arg = '-sh' | arg = '-hs' )  ; size = 'small'  ; density = 'high'   ; break ; endif
 
 *** fhead
       if( fhead = '' ) ; fhead = arg ; break ; endif
@@ -127,20 +132,25 @@ function help()
   say ''
   say ' Usage(2):'
   say '   save filename [-background ("white"|"black")]'
-  say '                 [-density ("low"|"normal"|"high"|density)]'
-  say '                 [-size ("small"|"normal"|"large"|size)]'
+  say '                 [-density ("low"|"normal"|"high"|"print"|density)]'
+  say '                 [-size ("small"|"normal"|"large"|"huge"|size)]'
+  say '                 [-hh|-lh|-hl|-nh|-nl|-sh|-hs]'
   say ''
   say '     filename   : Filename ending with .eps or .png'
   say '     background : Background color. Default="white"'
   say '     density    : Quality of rendering from eps to png. Default="low"'
   say '     size       : Size of png. Default="normal"'
+  say '     -hh       : same as "-size huge   -density high"'
+  say '     -lh | -hl : same as "-size large  -density high"'
+  say '     -nh | -hn : same as "-size normal -density high"'
+  say '     -sh | -hs : same as "-size small  -density high"'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This function uses ImageMagick and gxeps commands.'
   say ''
-  say ' Copyright (C) 2009-2018 Chihiro Kodama'
+  say ' Copyright (C) 2009-2019 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
