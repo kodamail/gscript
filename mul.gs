@@ -1,71 +1,71 @@
 *
 * Help is in the end of this script.
 *
-function mul(args)
-  _version='0.05r2'
+function mul( args )
+  _version='0.06r1'
+  rc = gsfallow( 'on' )
 
   if( args = '' )
     help()
     return
   endif
 
-*** arguement ***
-  imax = subwrd( args, 1 )
-  jmax = subwrd( args, 2 )
-  ipos = subwrd( args, 3 )
-  jpos = subwrd( args, 4 )
-
-
+***** Default value *****
+  imax    = 'none'
+  jmax    = 'none'
+  ipos    = 'none'
+  jpos    = 'none'
+  npos    = 'none'
   xoffset = 0
   yoffset = 0
   novpage = 0
-  xini    = "none"
-  xwid    = "none"
-  xint    = "none"
-  yini    = "none"
-  ywid    = "none"
-  yint    = "none"
+  xini    = 'none'
+  xwid    = 'none'
+  xint    = 'none'
+  yini    = 'none'
+  ywid    = 'none'
+  yint    = 'none'
 
-  i = 5
+*** arguement ***
+*  imax = subwrd( args, 1 )
+*  jmax = subwrd( args, 2 )
+*  ipos = subwrd( args, 3 )
+*  jpos = subwrd( args, 4 )
+
+  i = 1
+*  i = 5
   arg = "dummy"
-  while( arg != "" )
+  while( 1 )
     arg = subwrd( args, i )
     i = i + 1
+    if( arg = '' ); break; endif
 
-    if( arg = "-xoffset" )
-      xoffset = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-yoffset" )
-      yoffset = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-xini" )
-      xini = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-xwid" )
-      xwid = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-xint" )
-      xint = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-yini" )
-      yini = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-ywid" )
-      ywid = subwrd( args, i )
-      i = i + 1
-    endif
-    if( arg = "-yint" )
-      yint = subwrd( args, i )
-      i = i + 1
-    endif
+    while( 1 )
+      if( arg = '-xoffset' ) ; xoffset=subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-yoffset' ) ; yoffset=subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-xini'    ) ; xini   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-xwid'    ) ; xwid   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-xint'    ) ; xint   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-yini'    ) ; yini   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-ywid'    ) ; ywid   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-yint'    ) ; yint   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-n'       ) ; npos   =subwrd(args,i) ; i=i+1 ; break ; endif
 
+*     values
+      if( valnum(arg) != 0 & imax = 'none' ) ; imax=arg ; break ; endif
+      if( valnum(arg) != 0 & jmax = 'none' ) ; jmax=arg ; break ; endif
+      if( valnum(arg) != 0 & ipos = 'none' ) ; ipos=arg ; break ; endif
+      if( valnum(arg) != 0 & jpos = 'none' ) ; jpos=arg ; break ; endif
+
+      say 'syntax error: 'arg
+      return
+    endwhile
   endwhile
+
+  if( valnum(npos) != 0 & ipos = 'none' & jpos = 'none' )
+    ipos = math_mod( npos - 1, imax ) + 1
+    jpos = jmax - math_int( ( npos - 1 ) / imax )
+  endif
 
 
 ***** get real page *****
@@ -151,7 +151,6 @@ function mul(args)
   endif
 
 
-
 ***** set xini, xwid, etc *****
   if( xini = "none" ) ; xini = xini.imax ; endif
   if( xwid = "none" ) ; xwid = xwid.imax ; endif
@@ -160,7 +159,6 @@ function mul(args)
   if( yini = "none" ) ; yini = yini.jmax ; endif
   if( ywid = "none" ) ; ywid = ywid.jmax ; endif
   if( yint = "none" ) ; yint = yint.jmax ; endif
-
 
 
 ***** set parea *****
@@ -178,7 +176,6 @@ function mul(args)
 return
 
 
-
 *
 * help
 *
@@ -187,7 +184,7 @@ function help()
   say '   mul '_version' - set multi-window'
   say ' '
   say ' Usage:'
-  say '   mul imax jmax ipos jpos'
+  say '   mul imax jmax ( ipos jpos | -n npos )'
   say '       [-xoffset value/0] [-yoffset value/0] [-novpage]'
   say '       [-xini value] [-xwid value] [-xint value]'
   say '       [-yini value] [-ywid value] [-yint value]'
@@ -196,6 +193,7 @@ function help()
   say '     jmax      : number of window vertically ( 1<= jmax <= 5 )'
   say '     ipos      : horizontal position (count from left window)'
   say '     jpos      : vertical position (count from bottom window)'
+  say '     npos      : position (count from top-left window)'
   say '     xoffset   : offset of horizontal position'
   say '     yoffset   : offset of vertical position'
   say '     novpage   : avoid "set vpage"'
@@ -207,7 +205,7 @@ function help()
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2009 Chihiro Kodama'
+  say ' Copyright (C) 2009-2019 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
