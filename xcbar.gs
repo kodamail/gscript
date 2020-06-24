@@ -22,6 +22,7 @@ function xcbar( args )
   fyoffset = 0
   xoffset  = 0
   yoffset  = 0
+  fformat  = ''
 
 ***** Arguement *****
   i = 1
@@ -81,6 +82,11 @@ function xcbar( args )
       endif
       if( arg = '-fyoffset' | arg = '-fy' )
         fyoffset = subwrd( args, i )
+        i = i + 1
+        break
+      endif
+      if( arg = '-fformat' | arg = '-ffmt' )
+        fformat = subwrd( args, i )
         i = i + 1
         break
       endif
@@ -431,7 +437,11 @@ function xcbar( args )
       else
        'set string 'fcolor' l 'fthickness' 0'
       endif
-      'draw string 'xmoji' 'ymoji' 'hi.i
+      str = hi.i
+      if( fformat != '' )
+        str = math_format( fformat, hi.i )
+      endif
+      'draw string 'xmoji' 'ymoji' 'str
     endif
 
     i = i + 1
@@ -511,6 +521,7 @@ function help()
   say '         [ ( -foffset | -fo ) ( foffset | center ) ]'
   say '         [ ( -fcolor | -fc ) fcolor ]'
   say '         [ ( -fxoffset | -fx ) fxoffset ] [ ( -fyoffset | -fy ) fyoffset ]'
+  say '         [ ( -fformat | -ffmt ) fformat ]'
   say '         [ ( -direction | -dir ) ( horizontal | h | vertical | v ) ]'
   say '         [ -edge ( box | triangle | circle ) ]'
   say '         [ -line [ on | off ] ]'
@@ -534,6 +545,7 @@ function help()
   say '     fcolor     : label color number (default=1)'
   say '     fxoffset   : x-direction offset for a label (default=0)'
   say '     fyoffset   : y-direction offset for a label (default=0)'
+  say '     fformat    : font format (e.g. %5.2e, %.2f'
   say '     -direction : horizontal ("h" in short) or vertical ("v" in short)'
   say '                  color bar (default=horizontal)'
   say '     -edge      : shape of edge (default=box)'
