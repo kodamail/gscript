@@ -3,7 +3,7 @@
 *
 function xopen( args )
   rc = gsfallow( 'on' )
-  _version = '0.01b2'
+  _version = '0.01r1'
 
   if( args = '' )
     help()
@@ -30,7 +30,7 @@ function xopen( args )
   cmd = ''
 
 *** open with sdfopen if appropriate ***
-  if( ext2 = '.nc' )
+  if( ext2 = '.nc' | ext2 = '.nc4' )
     cmd = 'sdfopen'
   endif
 
@@ -54,7 +54,7 @@ function xopen( args )
       if( wrd1 = 'DSET' )
         length_tmp = strlen( wrd2 )
         ext2_tmp   = substr( wrd2, length_tmp-2, 3 )
-        if( ext2_tmp = '.nc' )
+        if( ext2_tmp = '.nc' | ext2_tmp = '.nc4' )
           file_type = 'nc'
           break
         endif
