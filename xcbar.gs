@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function xcbar( args )
-  _version = '0.08r1'
+  _version = '0.09r1'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -16,6 +16,7 @@ function xcbar( args )
   ymin = 'none'
   ymax = 'none'
   direction = 'none'
+  line = 'on'
 
   cnum = -1
   fxoffset = 0
@@ -33,7 +34,7 @@ function xcbar( args )
     if( arg = '' ); break; endif
 
     while( 1 )
-      if( arg = '-direction' | arg = '-dir' )
+      if( arg = '-direction' | arg = '-dir' | arg = '-d' )
         direction = subwrd( args, i )
         if( direction = 'h' ); direction = 'horizontal'; endif
         if( direction = 'v' ); direction = 'vertical'; endif
@@ -183,12 +184,54 @@ function xcbar( args )
 
 
 *** determine xmin, xmax, ymin, ymax if necessary ***
-* ( following cbar.gs )
+** ( following cbar.gs )
   if( xmin = 'none' | xmax = 'none' | ymin = 'none' | ymax = 'none' )
+*    'q gxinfo'
+*    sline = sublin( result, 2 )
+*    xsize = subwrd( sline, 4 )
+*    ysize = subwrd( sline, 6 )
+*    xline = sublin( result, 3 )
+*    yline = sublin( result, 4 )
+*    xlmin = subwrd( xline, 4 )
+*    xlmax = subwrd( xline, 6 )
+*    xlwid = xlmax - xlmin
+*    ylmin = subwrd( yline, 4 )
+*    ylmax = subwrd( yline, 6 )
+*    ylwid = ylmax - ylmin
+*
+**   vertical
+*    if( ylmin < 0.6 | xsize-xlmax > 1.5 )
+*      direction = 'vertical'
+*      xmin = xlmax + ( xsize - xlmax ) / 2 - 0.4
+*      xmax = xmin + 0.2
+*
+*      y1wid = 0.5
+*      if ( y1wid * cnum > ysize * 0.8 ) 
+*        y1wid = ysize * 0.8 / cnum
+*      endif
+*      ymin = ysize / 2 - y1wid * cnum / 2
+*      ymax = ysize / 2 + y1wid * cnum / 2
+*
+**   horizontal
+*    else
+*      direction = 'horizontal'
+*      ymin = ylmin / 2
+*      ymax = ymin + 0.2
+*
+*      x1wid = 0.8
+*      if ( x1wid * cnum > xsize * 0.8 )
+*        x1wid = xsize * 0.8 / cnum
+*      endif
+*      xmin = xsize / 2 - x1wid * cnum / 2
+*      xmax = xsize / 2 + x1wid * cnum / 2
+*
+*    endif
+
     'q gxinfo'
     sline = sublin( result, 2 )
     xsize = subwrd( sline, 4 )
     ysize = subwrd( sline, 6 )
+
     xline = sublin( result, 3 )
     yline = sublin( result, 4 )
     xlmin = subwrd( xline, 4 )
@@ -199,33 +242,30 @@ function xcbar( args )
     ylwid = ylmax - ylmin
 
 *   vertical
-    if( ylmin < 0.6 | xsize-xlmax > 1.5 )
+    if( ( ylmin < 0.6 | xsize-xlmax > 1.5 ) & direction != 'horizontal' )
       direction = 'vertical'
-      xmin = xlmax + ( xsize - xlmax ) / 2 - 0.4
-      xmax = xmin + 0.2
+      dx = xlwid / 30
+    
+      xmin = xlmax + 0.2
+      xmax = xmin + dx
 
-      y1wid = 0.5
-      if ( y1wid * cnum > ysize * 0.8 ) 
-        y1wid = ysize * 0.8 / cnum
-      endif
-      ymin = ysize / 2 - y1wid * cnum / 2
-      ymax = ysize / 2 + y1wid * cnum / 2
+      ymin = ylmin
+      ymax = ylmax
 
 *   horizontal
     else
       direction = 'horizontal'
-      ymin = ylmin / 2
-      ymax = ymin + 0.2
 
-      x1wid = 0.8
-      if ( x1wid * cnum > xsize * 0.8 )
-        x1wid = xsize * 0.8 / cnum
-      endif
-      xmin = xsize / 2 - x1wid * cnum / 2
-      xmax = xsize / 2 + x1wid * cnum / 2
+      dy = ylwid / 20
+      ymax = ylmin - 0.3
+      ymin = ymax - dy
+
+      xmin = xlmin
+      xmax = xlmax
 
     endif
   endif
+
   xmin = xmin + xoffset
   xmax = xmax + xoffset
   ymin = ymin + yoffset
@@ -547,11 +587,9 @@ function help()
   say '     fyoffset   : y-direction offset for a label (default=0)'
   say '     fformat    : font format (e.g. %5.2e, %.2f'
   say '     -direction : horizontal ("h" in short) or vertical ("v" in short)'
-  say '                  color bar (default=horizontal)'
+  say '                  color bar (default=auto)'
   say '     -edge      : shape of edge (default=box)'
-  say '     -line      : lines between each color box.'
-  say '                  line is off without -line'
-  say '                  line is on just for -line'
+  say '     -line      : lines between each color box. (default="on")'
   say '     -levcol    : color of lines between each color box (default=1)'
   say '     c(1) l(1) c(2) level(2) ... l(cnum-1) c(cnum)'
   say '                : color numbers and levels. By using this option,'
@@ -563,7 +601,7 @@ function help()
   say ''
   say '    xcbar is based on cbar.gs'
   say ''
-  say ' Copyright (C) 2011-2015 Chihiro Kodama'
+  say ' Copyright (C) 2011-2021 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
