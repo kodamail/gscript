@@ -11,12 +11,13 @@ function xcbar( args )
   endif
 
 ***** Default value *****
-  xmin = 'none'
-  xmax = 'none'
-  ymin = 'none'
-  ymax = 'none'
+  xmin      = 'none'
+  xmax      = 'none'
+  ymin      = 'none'
+  ymax      = 'none'
   direction = 'none'
-  line = 'on'
+  line      = 'on'
+  caption   = ''
 
   cnum = -1
   fxoffset = 0
@@ -34,6 +35,17 @@ function xcbar( args )
     if( arg = '' ); break; endif
 
     while( 1 )
+      if( arg = '-caption' | arg = '-c' )
+        caption = subwrd( args, i )
+        i = i + 1
+        while ( 1 )
+          tmp = subwrd( args, i )
+          if( tmp = '' ) ; break ; endif
+          caption = caption % ' ' % tmp
+          i = i + 1
+        endwhile
+        break
+      endif
       if( arg = '-direction' | arg = '-dir' | arg = '-d' )
         direction = subwrd( args, i )
         if( direction = 'h' ); direction = 'horizontal'; endif
@@ -268,8 +280,10 @@ function xcbar( args )
 
   xmin = xmin + xoffset
   xmax = xmax + xoffset
+  xmid = ( xmax + xmin ) / 2
   ymin = ymin + yoffset
   ymax = ymax + yoffset
+  ymid = ( ymax + ymin ) / 2
 
 *** determine direction if necessary ***
   if( direction != 'horizontal' & direction != 'vertical' )
@@ -348,6 +362,7 @@ function xcbar( args )
   y1 = ymin - ydif
   y2 = ymin * ydir + ymax * xdir
 
+  maxstr = 0
   while( i <= cnum )
     x1 = x1 + xdif
     x2 = x2 + xdif
@@ -484,8 +499,26 @@ function xcbar( args )
       'draw string 'xmoji' 'ymoji' 'str
     endif
 
+    if( math_strlen(str) > maxstr )
+      maxstr = math_strlen(str)
+    endif
+
     i = i + 1
   endwhile
+
+*  caption = 'Temperature [K]'
+  if( caption != '' )
+
+    'set strsiz 'fwidth*1.2' 'fheight*1.2
+    if( direction = 'horizontal' )
+      'set string 'fcolor' tc 'fthickness' 0'
+*    'draw string 'xmid' 'ymin-fheight-0.2' 'str2
+      'draw string 'xmid' 'ymin-fheight*2' 'caption
+    else
+      'set string 'fcolor' tc 'fthickness' 90'
+      'draw string 'xmax+fwidth*(2+maxstr)' 'ymid' 'caption
+    endif
+  endif
 
 return
 
@@ -566,6 +599,7 @@ function help()
   say '         [ -edge ( box | triangle | circle ) ]'
   say '         [ -line [ on | off ] ]'
   say '         [ -levcol c(1) l(1) c(2) level(2) ... l(cnum-1) c(cnum) ]'
+  say '         [ ( -caption | -c ) caption... ]'
   say ''
   say '     xmin       : color bar position (left side)'
   say '     xmax       : color bar position (right side)'
