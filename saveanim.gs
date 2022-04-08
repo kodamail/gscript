@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function saveanim( args )
-  _version = '0.01b1'
+  _version = '0.01b2'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -21,6 +21,24 @@ function saveanim( args )
   tmin = qdims( 'tmin' )
   tmax = qdims( 'tmax' )
 
+* save color table
+  gxinfo = qgxinfo('last')
+  if( gxinfo = 'Shaded2' | gxinfo = 'GrFill' )
+    'q shades'
+    shdinfo = result
+    cnum = subwrd( shdinfo, 5 )
+    ccols = ''
+    clevs = ''
+    i = 1
+    while( i <= cnum )
+      rec = sublin( shdinfo, i+1 )
+      ccols = ccols % ' ' % subwrd( rec, 1 )
+      if( i = cnum ) ; break ; endif
+      clevs = clevs % ' ' % subwrd( rec, 3 )
+      i = i + 1
+    endwhile
+  endif
+
   file_list = ''
 
   t = tmin
@@ -31,6 +49,10 @@ function saveanim( args )
 
     'c'
     'set grads off'
+    if( gxinfo = 'Shaded2' | gxinfo = 'GrFill' )
+      'set clevs 'clevs
+      'set ccols 'ccols
+    endif
     'd 'var
     'draw title 't2time(t)
     gxinfo = qgxinfo('last')
@@ -70,7 +92,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This function uses gxeps command.'
   say ''
-  say ' Copyright (C) 2019-2019 Chihiro Kodama'
+  say ' Copyright (C) 2019-2022 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
