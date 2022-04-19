@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function color( args )
- _version = '0.08r1'
+ _version = '0.08r2'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -101,9 +101,14 @@ function color( args )
         endif
       endif
       if( word = i ) ; break; endif
+      if( start = end ) ; start = -1 ; break ; endif
     endwhile
 
-    xcbar = substr( args, start, end-start+1 )
+    if( start < 1 )
+      xcbar = '1 10 0.5 0.8 -line -edge triangle'
+    else
+      xcbar = substr( args, start, end-start+1 )
+    endif
   endif
 
 
@@ -712,7 +717,7 @@ function help()
   say '       [-div value]'
   say '       [-gxout gxout-name]'
   say '       [-kind string] [-alpha value]'
-  say '       [-sample] [-xcbar xcbar-args]'
+  say '       [-sample] [-xcbar [xcbar-args]]'
   say '       [-ret]'
   say '       [-verbose | -v]'
   say ''
@@ -742,7 +747,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This version is compatible with color.gs Ver 0.01 and after except gxout default value.'
   say ''
-  say ' Copyright (C) 2005-2015 Chihiro Kodama'
+  say ' Copyright (C) 2005-2022 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
