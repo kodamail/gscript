@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function mul( args )
-  _version='0.06r1'
+  _version='0.06r2'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -25,6 +25,7 @@ function mul( args )
   yini    = 'none'
   ywid    = 'none'
   yint    = 'none'
+  grads   = 'on'
 
 *** arguement ***
 *  imax = subwrd( args, 1 )
@@ -50,6 +51,7 @@ function mul( args )
       if( arg = '-ywid'    ) ; ywid   =subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-yint'    ) ; yint   =subwrd(args,i) ; i=i+1 ; break ; endif
       if( arg = '-n'       ) ; npos   =subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-grads'   ) ; grads  =subwrd(args,i) ; i=i+1 ; break ; endif
 
 *     values
       if( valnum(arg) != 0 & imax = 'none' ) ; imax=arg ; break ; endif
@@ -172,6 +174,9 @@ function mul( args )
     'set vpage 0 'vpagex' 0 'vpagey
   endif
   'set parea 'xmin' 'xmax' 'ymin' 'ymax
+  if( grads = 'off' )
+    'set grads off'
+  endif
 
 return
 
@@ -188,6 +193,7 @@ function help()
   say '       [-xoffset value/0] [-yoffset value/0] [-novpage]'
   say '       [-xini value] [-xwid value] [-xint value]'
   say '       [-yini value] [-ywid value] [-yint value]'
+  say '       [-grads on|off]'
   say ''
   say '     imax      : number of window horizontally ( 1<= imax <= 5 )'
   say '     jmax      : number of window vertically ( 1<= jmax <= 5 )'
@@ -200,12 +206,13 @@ function help()
   say '     xini,yini : lower-left position when "mul ? ? 1 1"'
   say '     xwid,ywid : width of figure'
   say '     xint,yint : interval of figures'
+  say '     -grads    : "set grads" after setting display'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2009-2019 Chihiro Kodama'
+  say ' Copyright (C) 2009-2022 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
