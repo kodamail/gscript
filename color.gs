@@ -20,6 +20,7 @@ function color( args )
   min    = 'none'
   max    = 'none'
   int    = 'none'
+  inttype= 'none'
   div    = 10
   levs   = ''
   xcbar  = 'none'
@@ -54,6 +55,10 @@ function color( args )
       endif
 
 *** int, max, min
+      if( min != 'none' & max != 'none' & int != 'none' & inttype = 'none' )
+        inttype = arg
+        break
+      endif
       if( valnum(arg) != 0 & min != 'none' & max != 'none' & int = 'none' )
         int = arg
         break
@@ -207,6 +212,10 @@ function color( args )
     say 'error in color.gs: multiple definition of color levels'
     return
   endif
+  if( inttype = 'fac' & int <= 1 )
+    say 'error in colog.gs: interval should be greater than 1 when inttype="fac"'
+    return
+  endif
 
 ***** Calculate levels *****
   if( levs = '' )
@@ -218,7 +227,11 @@ function color( args )
 
     while( value <= max )
       levs = levs % ' ' % value
-      value = value + int
+      if( inttype = 'fac' )
+        value = value * int
+      else
+        value = value + int
+      endif
       colnum = colnum + 1
     endwhile
 
@@ -366,7 +379,11 @@ function color( args )
 
       while( i < colnum )
         levcol = levcol % ' ' % (i+15) % ' ' % value
-        value = value + int
+        if( inttype = 'fac' )
+          value = value * int
+        else
+          value = value + int
+        endif
         i = i + 1
       endwhile
       levcol = levcol % ' ' % (i+15)
@@ -713,7 +730,7 @@ function help()
   say ' '
   say ' Usage:'
   say '   color'
-  say '       (min max [int] | -levs lev1 lev2 ... | -var var-name)'
+  say '       (min max [int [inttype]] | -levs lev1 lev2 ... | -var var-name)'
   say '       [-div value]'
   say '       [-gxout gxout-name]'
   say '       [-kind string] [-alpha value]'
@@ -721,7 +738,9 @@ function help()
   say '       [-ret]'
   say '       [-verbose | -v]'
   say ''
-  say '     min max [int]    : Minimum, maximum and interval of values.'
+  say '     min max [int [inttype]]'
+  say '                      : Minimum, maximum, interval of values and type of interval.'
+  say '                        inttype may be: "linear" (default), "fac".'
   say '     -levs lev1 lev2 ... '
   say '                      : Levels of variable value.'
   say '     -var var-name    : Name of variable to draw'

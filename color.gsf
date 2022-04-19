@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function color( args )
- _version = '0.08r1'
+ _version = '0.08r2'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -20,6 +20,7 @@ function color( args )
   min    = 'none'
   max    = 'none'
   int    = 'none'
+  inttype= 'none'
   div    = 10
   levs   = ''
   xcbar  = 'none'
@@ -54,6 +55,10 @@ function color( args )
       endif
 
 *** int, max, min
+      if( min != 'none' & max != 'none' & int != 'none' & inttype = 'none' )
+        inttype = arg
+        break
+      endif
       if( valnum(arg) != 0 & min != 'none' & max != 'none' & int = 'none' )
         int = arg
         break
@@ -101,9 +106,14 @@ function color( args )
         endif
       endif
       if( word = i ) ; break; endif
+      if( start = end ) ; start = -1 ; break ; endif
     endwhile
 
-    xcbar = substr( args, start, end-start+1 )
+    if( start < 1 )
+      xcbar = '1 10 0.5 0.8 -line -edge triangle'
+    else
+      xcbar = substr( args, start, end-start+1 )
+    endif
   endif
 
 
@@ -202,6 +212,10 @@ function color( args )
     say 'error in color.gs: multiple definition of color levels'
     return
   endif
+  if( inttype = 'fac' & int <= 1 )
+    say 'error in colog.gs: interval should be greater than 1 when inttype="fac"'
+    return
+  endif
 
 ***** Calculate levels *****
   if( levs = '' )
@@ -213,7 +227,11 @@ function color( args )
 
     while( value <= max )
       levs = levs % ' ' % value
-      value = value + int
+      if( inttype = 'fac' )
+        value = value * int
+      else
+        value = value + int
+      endif
       colnum = colnum + 1
     endwhile
 
@@ -361,7 +379,11 @@ function color( args )
 
       while( i < colnum )
         levcol = levcol % ' ' % (i+15) % ' ' % value
-        value = value + int
+        if( inttype = 'fac' )
+          value = value * int
+        else
+          value = value + int
+        endif
         i = i + 1
       endwhile
       levcol = levcol % ' ' % (i+15)
@@ -708,15 +730,17 @@ function help()
   say ' '
   say ' Usage:'
   say '   color'
-  say '       (min max [int] | -levs lev1 lev2 ... | -var var-name)'
+  say '       (min max [int [inttype]] | -levs lev1 lev2 ... | -var var-name)'
   say '       [-div value]'
   say '       [-gxout gxout-name]'
   say '       [-kind string] [-alpha value]'
-  say '       [-sample] [-xcbar xcbar-args]'
+  say '       [-sample] [-xcbar [xcbar-args]]'
   say '       [-ret]'
   say '       [-verbose | -v]'
   say ''
-  say '     min max [int]    : Minimum, maximum and interval of values.'
+  say '     min max [int [inttype]]'
+  say '                      : Minimum, maximum, interval of values and type of interval.'
+  say '                        inttype may be: "linear" (default), "fac".'
   say '     -levs lev1 lev2 ... '
   say '                      : Levels of variable value.'
   say '     -var var-name    : Name of variable to draw'
@@ -742,7 +766,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This version is compatible with color.gs Ver 0.01 and after except gxout default value.'
   say ''
-  say ' Copyright (C) 2005-2015 Chihiro Kodama'
+  say ' Copyright (C) 2005-2022 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
