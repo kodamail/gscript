@@ -2,7 +2,7 @@
 * Help is in the end of this script.
 *
 function saveanim( args )
-  _version = '0.01b2'
+  _version = '0.01r1'
   rc = gsfallow( 'on' )
 
   if( args = '' )
@@ -10,12 +10,53 @@ function saveanim( args )
     return
   endif
 
-*** arguements ***
-  var  = subwrd( args, 1 )
-  head = subwrd( args, 2 )
-  if( head = '' ) ; head = 'anim_' % var ; endif
+***** Default value *****
+  var     = ''
+  head    = ''
+  type    = 'gifanim'
+  fps     = 5
+  density = 'low'
+  size    = 'medium'
 
-  fps = 5
+***** Arguement *****
+  i = 1
+  while( 1 )
+    arg = subwrd( args, i )
+    i = i + 1;
+    if( arg = '' ); break; endif
+
+    while( 1 )
+*** option
+      if( arg = '-density' ) ; density = subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-fps'     ) ; fps     = subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-size'    ) ; size    = subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-type'    ) ; type    = subwrd(args,i) ; i=i+1 ; break ; endif
+
+      if( arg = '-hh'               ) ; size = 'huge'   ; density = 'high' ; break ; endif
+      if( arg = '-hl' | arg = '-lh' ) ; size = 'large'  ; density = 'high' ; break ; endif
+      if( arg = '-hn' | arg = '-nh' ) ; size = 'normal' ; density = 'high' ; break ; endif
+      if( arg = '-hs' | arg = '-sh' ) ; size = 'small'  ; density = 'high' ; break ; endif
+
+***
+      if( var = '' )
+        var = arg
+        break
+      endif
+
+      if( var != '' & head = '' )
+        head = arg
+        break
+      endif
+
+      say 'syntax error: 'arg
+      return
+    endwhile
+
+  endwhile
+
+*  var  = subwrd( args, 1 )
+*  head = subwrd( args, 2 )
+  if( head = '' ) ; head = 'anim_' % var ; endif
 
 ***
   tmin = qdims( 'tmin' )
@@ -59,18 +100,17 @@ function saveanim( args )
     if( gxinfo = 'Shaded2' | gxinfo = 'GrFill' )
       'xcbar -line on -edge triangle'
     endif
-    'save -density low -size normal 'file
+    'save -density 'density' -size 'size' 'file
     file_list = file_list % ' ' % file
     t = t + 1
   endwhile
 
-  delay = 100 / fps
-*  prex( '!convert -layers optimize -delay 'delay' 'head'*.png 'head'.gif' )
-*  prex( '!convert -layers optimize -delay 'delay' 'file_list' 'head'.gif' )
-  prex( '!convert -delay 'delay' 'file_list' 'head'.gif' )
-  'set t 'tmin' 'tmax
-exit
+  if( type = 'gifanim' )
+    delay = 100 / fps
+    prex( '!convert -delay 'delay' 'file_list' 'head'.gif' )
+  endif
 
+  'set t 'tmin' 'tmax
 return
 
 *
@@ -78,21 +118,36 @@ return
 *
 function help()
   say ' Name:'
-  say '   saveanim '_version' - Save animation as gif format.'
+  say '   saveanim '_version' - Save animation as gif format or separate png files.'
   say ' '
   say ' Usage:'
-  say '   saveanim var-exp [file-head]'
+  say '   saveanim var-exp [fhead]'
+  say '            [-type type]'
+  say '            [-fps fps]'
+  say '            [-density ] [-size size]'
+  say '            [-hh|-lh|-hl|-nh|-hn|-sh|-hs]'
   say ''
-  say '     var-exp   : expression'
-  say '     file-head : filename before'
-  say '       (ex. file-head=test -> save as test.eps)'
+  say '     var-exp   : Expression'
+  say '     fhead     : Header of filename (before extension)'
+  say '     type      : Output file type. "gifanim" or "png". Default="gifanim".'
+  say '     fps       : Flame per second for animation. Default=5'
+  say '     density   : Quality of rendering from eps to png. Default="low"'
+  say '     size      : Size of png. Default="normal"'
+  say '     -hh       : Same as "-size huge   -density high"'
+  say '     -lh | -hl : Same as "-size large  -density high"'
+  say '     -nh | -hn : Same as "-size normal -density high"'
+  say '     -sh | -hs : Same as "-size small  -density high"'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
-  say '   This function uses gxeps command.'
+  say '   This function uses save.gs and ImageMagic.'
   say ''
   say ' Copyright (C) 2019-2022 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
+
+  fps     = 5
+  density = 'low'
+  size    = 'medium'
