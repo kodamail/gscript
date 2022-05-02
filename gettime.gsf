@@ -1,0 +1,39 @@
+*
+* Convert time for GrADS
+*
+* str: virtual time including %y, %ypp, %end.
+* y  : year
+* ret: time for GrADS
+*
+* e.g. %y, %ypp -> 1980, 1981
+*      %end -> 18z31 (if Jan, 6 hourly )
+*
+function gettime( str, y )
+  ret = str
+  yret = -999
+  ypp = y + 1
+  ymm = y - 1
+
+  tmp = strrep( ret, '%ypp', ypp )
+  if( ret != tmp ) ; yret = ypp ; endif
+  ret = tmp
+
+  tmp = strrep( ret, '%ymm', ymm )
+  if( ret != tmp ) ; yret = ymm ; endif
+  ret = tmp
+
+  tmp = strrep( ret, '%y', y )
+  if( ret != tmp ) ; yret = y ; endif
+  ret = tmp
+
+  pos = find( ret, '%end' )
+  if( pos > 0 )
+    len = math_strlen( ret )
+    cm   = substr( ret, pos+4, 3 )
+    year = substr( ret, pos+7, len-(pos+7)+1 )
+    t1 = time2t( '00z01'cm''year )
+    t2 = t1 + tsteps( year, cmonth(cm) ) - 1
+    ret = t2time( t2 )
+  endif
+
+return ( ret )
