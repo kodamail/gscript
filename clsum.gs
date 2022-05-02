@@ -18,6 +18,7 @@ function clsum(args)
   yend   = ''
   ylist  = ''
   varout = ''
+  within = 0
 
   i = 1
   while( 1 )
@@ -28,6 +29,7 @@ function clsum(args)
     while( 1 )
 *** option
       if( arg = '-ylist' )  ; ylist = subwrd(args,i) ; i=i+1 ; break ; endif
+      if( arg = '-within' ) ; within = 1 ; break ; endif
 
 *** varin, time1, time2, ...
       if( varin  = '' ) ; varin = arg ; break ; endif
@@ -85,8 +87,45 @@ function clsum(args)
       exit
     endif
 
-    say 'sum( 'varin', time='timey1', time='timey2 ')'
-    'clsumtemp = sum( 'varin', time='timey1', time='timey2' )'
+    calc = 0
+*   only support ystart/yend for within=1
+*   timey2 >= 00z01jan{ypp} ->
+    if( within = 1 )
+      if( time2t(timey2) >= time2t('00z01jan' % (yend+1)) )
+        calc = 1
+        say 'Keep time within year range'
+        timey2a = gettime( time2, ystart-1 )
+        timey1a = t2time( time2t( '00z01jan'ystart ) )
+        say '  sum( 'varin', time='timey1a', time='timey2a ')'
+        'clsumav = sum( 'varin', time='timey1a', time='timey2a ')'
+        timey2b = t2time( time2t( '00z01jan' % (yend+1) ) - 1 )
+        say '  sum( 'varin', time='timey1', time='timey2b ')'
+        'clsumbv = sum( 'varin', time='timey1', time='timey2b ')'
+        'clsumav = const( clsumav, 0, -u )'
+        'clsumbv = const( clsumbv, 0, -u )'
+        'clsumtemp = clsumav + clsumbv'
+      endif
+      if( time2t(timey1) < time2t('00z01jan' % (ystart)) )
+        calc = 1
+        say 'Keep time within year range'
+        timey2a = gettime( time2, ystart )
+        timey1a = t2time( time2t( '00z01jan'ystart ) )
+        say '  sum( 'varin', time='timey1a', time='timey2a ')'
+        'clsumav = sum( 'varin', time='timey1a', time='timey2a ')'
+        timey1b = gettime( time1, yend+1 )
+        timey2b = t2time( time2t( '00z01jan' % (yend+1) ) - 1 )
+        say '  sum( 'varin', time='timey1b', time='timey2b ')'
+        'clsumbv = sum( 'varin', time='timey1', time='timey2b ')'
+        'clsumav = const( clsumav, 0, -u )'
+        'clsumbv = const( clsumbv, 0, -u )'
+        'clsumtemp = clsumav + clsumbv'
+      endif
+    endif
+
+    if( calc = 0 )
+      say 'sum( 'varin', time='timey1', time='timey2 ')'
+      'clsumtemp = sum( 'varin', time='timey1', time='timey2' )'
+    endif
  
     if( p = 1 )
       'clsum = clsumtemp'
@@ -137,6 +176,7 @@ function help()
   say '     ystart yend : year range (ystart <= yend)'
   say '     -ylist list : year used'
   say '     var_out     : variable in which climatological mean will be stored.'
+  say '     -within     : do not use data outside year range with %ypp and/or %ymm.'
   say ''
   say ' Note:'
   say '   [arg-name]       : specify if needed'
