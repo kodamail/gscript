@@ -2,7 +2,7 @@
 * Help is in the end of this script
 *
 function drawpoly( args )
-  _version = '0.02r2'
+  _version = '0.03r1'
   rc = gsfallow( 'on' )
   if( args = '' )
     help()
@@ -20,6 +20,7 @@ function drawpoly( args )
   g       = -1
   b       = -1
   a       = -1
+  color   = -1
   setline = ''
 
 ***** Arguement *****
@@ -47,6 +48,10 @@ function drawpoly( args )
         b = subwrd(args,i+2)
         a = subwrd(args,i+3)
         i=i+4 ; break
+      endif
+      if( arg = '-color' ) 
+        color = subwrd(args,i)
+        i=i+1 ; break
       endif
       if( arg = '-setline' ) 
         setline = subwrd(args,i) ; i=i+1
@@ -99,6 +104,12 @@ function drawpoly( args )
     endif
   endif
 
+  if( color >= 0 )
+    r = r.color
+    g = g.color
+    b = b.color
+  endif
+  
   if( r != -1 & g != -1 & g != -1 )
     if( a != -1 ) ; 'set rgb 99 'r' 'g' 'b' 'a
     else ; 'set rgb 99 'r' 'g' 'b
@@ -140,21 +151,25 @@ return
 function help()
   say ' Name:'
   say '   drawpoly '_version' - draw polygon'
+  say '   drawline '_version' - draw line'
   say ' '
   say ' Usage:'
-  say '   drawpoly [ -o | open ]'
+  say '   drawpoly [ -o | opened ]'
   say '            [ -f ]'
   say '            [ -rgb  r g b ]'
   say '            [ -rgba r g b a ]'
+  say '            [ -color color ]'
   say '            [ -setline setline-options ]'
   say '            [ -by ( world | grid | xy ) ] x1 y1 x2 y2 ...'
   say ' '
   say ''
-  say '     -o | open : open polygon (for drawline.gs)'
+  say '     -o | opened : open polygon (for drawline.gs)'
   say ''
   say '     -f   : filled'
   say ''
   say '     -rgb | -rgba : rgb or rgba values in [0-255]'
+  say ''
+  say '     -color : color number [0-15]'
   say ''
   say '     -setline : options same as "set line"'
   say ''
@@ -169,7 +184,7 @@ function help()
   say '   [arg-name]       : specify if needed'
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say ''
-  say ' Copyright (C) 2013-2019 Chihiro Kodama'
+  say ' Copyright (C) 2013-2024 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
