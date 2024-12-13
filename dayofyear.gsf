@@ -1,28 +1,47 @@
 function dayofyear( time )
-  length = math_strlen( time )
-  year   = substr( time, length-3, 4 )
-  cmonth = substr( time, length-6, 3 )
-  cmonth = chcase( cmonth, 'upper' )
-  day = substr( time, length-8, 2 )
+  if( valnum(time) = 0 )
+* time: string (e.g. "01jan2000") -> return day-of-year
+    length = math_strlen( time )
+    year   = substr( time, length-3, 4 )
+    cmonth = substr( time, length-6, 3 )
+    cmonth = chcase( cmonth, 'upper' )
+    day = substr( time, length-8, 2 )
 
-  if( cmonth = 'JAN' ) ; month = 1  ; endif
-  if( cmonth = 'FEB' ) ; month = 2  ; endif
-  if( cmonth = 'MAR' ) ; month = 3  ; endif
-  if( cmonth = 'APR' ) ; month = 4  ; endif
-  if( cmonth = 'MAY' ) ; month = 5  ; endif
-  if( cmonth = 'JUN' ) ; month = 6  ; endif
-  if( cmonth = 'JUL' ) ; month = 7  ; endif
-  if( cmonth = 'AUG' ) ; month = 8  ; endif
-  if( cmonth = 'SEP' ) ; month = 9  ; endif
-  if( cmonth = 'OCT' ) ; month = 10 ; endif
-  if( cmonth = 'NOV' ) ; month = 11 ; endif
-  if( cmonth = 'DEC' ) ; month = 12 ; endif
+    if( cmonth = 'JAN' ) ; month = 1  ; endif
+    if( cmonth = 'FEB' ) ; month = 2  ; endif
+    if( cmonth = 'MAR' ) ; month = 3  ; endif
+    if( cmonth = 'APR' ) ; month = 4  ; endif
+    if( cmonth = 'MAY' ) ; month = 5  ; endif
+    if( cmonth = 'JUN' ) ; month = 6  ; endif
+    if( cmonth = 'JUL' ) ; month = 7  ; endif
+    if( cmonth = 'AUG' ) ; month = 8  ; endif
+    if( cmonth = 'SEP' ) ; month = 9  ; endif
+    if( cmonth = 'OCT' ) ; month = 10 ; endif
+    if( cmonth = 'NOV' ) ; month = 11 ; endif
+    if( cmonth = 'DEC' ) ; month = 12 ; endif
 
-  doy = 0
-  m = 1
-  while( m < month )
-    doy = doy + days( year, m )
-    m = m + 1
-  endwhile
-  doy = doy + day
-return doy
+    doy = 0
+    m = 1
+    while( m < month )
+      doy = doy + days( year, m )
+      m = m + 1
+    endwhile
+    doy = doy + day
+    return doy
+    
+  else
+* time: integer or float (day-of-year) -> return time (e.g. "21jan")
+*   assume no leap year
+    doy = time
+    m = 1
+    while ( doy > 0 )
+      doy = doy - days( 1999, m )
+      m = m + 1
+    endwhile
+    m = m - 1
+    doy = doy + days (1999, m)
+    time = printf('%02d', doy) % cmonth(m,3)
+    return time
+  endif
+  
+return
