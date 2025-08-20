@@ -9,7 +9,7 @@ function mul2( args )
     return
   endif
 
-*** arguement ***
+*** argument ***
   imax = subwrd( args, 1 )
   jmax = subwrd( args, 2 )
   ipos = subwrd( args, 3 )
