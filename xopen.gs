@@ -3,7 +3,7 @@
 *
 function xopen( args )
   rc = gsfallow( 'on' )
-  _version = '0.01r1'
+  _version = '0.01r2'
 
   if( args = '' )
     help()
@@ -42,6 +42,8 @@ function xopen( args )
     endif
 
     file_type = 'grd'
+    flag_tail_ch = 0
+    str_ch = ''
     while( 1 = 1 )
       ret = read( fname )
       line1 = sublin( ret, 1 )
@@ -59,8 +61,23 @@ function xopen( args )
           file_type = 'nc'
           break
         endif
+        if( ext2_tmp = '%ch' )
+          flag_tail_ch = 1
+	endif
+      endif
+      if( wrd1 = 'CHSUB' & str_ch = '')
+        str_ch = subwrd( line2, 4 )
       endif
     endwhile
+
+    if( flag_tail_ch = 1 )
+      length_tmp = strlen( str_ch )
+      ext2_tmp   = substr( str_ch, length_tmp-2, 3 )
+      ext3_tmp   = substr( wstrch, length_tmp-3, 4 )
+      if( ext2_tmp = '.nc' | ext3_tmp = '.nc4' )
+        file_type = 'nc'
+      endif
+    endif
 
     if( file_type = 'grd' )
       cmd = 'open'
@@ -95,7 +112,7 @@ function help()
   say '   (arg1 | arg2)    : arg1 or arg2 must be specified'
   say '   This function depends on chcase.gsf.'
   say ''
-  say ' Copyright (C) 2012-2015 Chihiro Kodama'
+  say ' Copyright (C) 2012-2026 Chihiro Kodama'
   say ' Distributed under GNU GPL (http://www.gnu.org/licenses/gpl.html)'
   say ''
 return
